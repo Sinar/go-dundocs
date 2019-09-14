@@ -10,3 +10,22 @@
 
 # Output of the go coverage tool, specifically when used with LiteIDE
 *.out
+
+# Ignore binary
+go-dundocs
+go-dundebates
+
+# Ignore dist binary
+dist/*
+
+# Ignore direnv
+.envrc*
+
+# Ignore raw + split  folders
+raw/*
+split/*
+splitout/*
+
+# Ignore Goland
+.idea/*
+
