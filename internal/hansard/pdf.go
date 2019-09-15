@@ -33,23 +33,26 @@ func NewPDFDocument(pdfPath string) (*PDFDocument, error) {
 	}
 	totalPage := r.NumPage()
 
-	for pageIndex := 1; pageIndex <= totalPage; pageIndex++ {
-		p := r.Page(pageIndex)
-		if p.V.IsNull() {
-			continue
-		}
-
-		rows, _ := p.GetTextByRow()
-		for _, row := range rows {
-			println(">>>> row: ", row.Position)
-			for _, word := range row.Content {
-				fmt.Println(word.S)
-			}
-		}
-	}
+	// Use it in another function ...
+	//for pageIndex := 1; pageIndex <= totalPage; pageIndex++ {
+	//	p := r.Page(pageIndex)
+	//	if p.V.IsNull() {
+	//		continue
+	//	}
+	//
+	//	rows, _ := p.GetTextByRow()
+	//	for _, row := range rows {
+	//		println(">>>> row: ", row.Position)
+	//		for _, word := range row.Content {
+	//			fmt.Println(word.S)
+	//		}
+	//	}
+	//}
 
 	// Init it and fill it with the extracted info  earlier ..
-	pdfDoc := PDFDocument{}
+	pdfDoc := PDFDocument{
+		NumPages: totalPage,
+	}
 
 	return &pdfDoc, nil
 }
