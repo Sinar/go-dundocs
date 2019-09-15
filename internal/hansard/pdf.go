@@ -31,28 +31,59 @@ func NewPDFDocument(pdfPath string) (*PDFDocument, error) {
 	if err != nil {
 		return nil, fmt.Errorf("PDFAccessErr: %w", err)
 	}
-	totalPage := r.NumPage()
 
+	totalPage := r.NumPage()
+	// DEBUG
+	totalPage = 3
+	var pdfPages []PDFPage
+	// Init it and fill it with the extracted info  earlier ..
+	pdfDoc := PDFDocument{
+		NumPages:   totalPage,
+		Pages:      pdfPages,
+		sourcePath: pdfPath,
+	}
+
+	for pageIndex := 1; pageIndex <= totalPage; pageIndex++ {
+		p := r.Page(pageIndex)
+		if p.V.IsNull() {
+			continue
+		}
+		// New Page to be Processed ..
+		newPageProcessed := PDFPage{}
+		exerr := extractPDFPageContent(&newPageProcessed, p)
+		if exerr != nil {
+			panic(exerr)
+		}
+		// If OK, append them ..
+		pdfDoc.Pages = append(pdfDoc.Pages, newPageProcessed)
+	}
+
+	return &pdfDoc, nil
+}
+
+func extractPDFPageContent(pdfPage *PDFPage, p pdf.Page) error {
+
+	rows, _ := p.GetTextByRow()
+	for _, row := range rows {
+		var contentPreview []string
+		exerr := extractContentPreviewByRow(row, &contentPreview, MaxLineProcessed)
+		if exerr != nil {
+			// HOWTO multi error?
+			//return &pdfDoc, fmt.Errorf(": %w", exerr)
+			panic(exerr)
+		}
+	}
+
+	return nil
+}
+
+func extractContentPreviewByRow(row *pdf.Row, contentPreview *[]string, i int) error {
 	// Use it in another function ...
-	//for pageIndex := 1; pageIndex <= totalPage; pageIndex++ {
-	//	p := r.Page(pageIndex)
-	//	if p.V.IsNull() {
-	//		continue
-	//	}
-	//
-	//	rows, _ := p.GetTextByRow()
-	//	for _, row := range rows {
 	//		println(">>>> row: ", row.Position)
 	//		for _, word := range row.Content {
 	//			fmt.Println(word.S)
 	//		}
 	//	}
-	//}
 
-	// Init it and fill it with the extracted info  earlier ..
-	pdfDoc := PDFDocument{
-		NumPages: totalPage,
-	}
-
-	return &pdfDoc, nil
+	return nil
 }
