@@ -30,6 +30,8 @@ func TestNewPDFDocument(t *testing.T) {
 		{"happy path #1, Lisan", args{"/Users/leow/GOMOD/go-dundocs/raw/Lisan/SOALAN MULUT (261-272).pdf", &hansard.ExtractPDFOptions{NumPages: 19}}, false},
 		{"happy path #2, BukanLisan", args{"/Users/leow/GOMOD/go-dundocs/raw/BukanLisan/41 - 60.pdf", nil}, false},
 		{"table files, lampiran", args{"/Users/leow/GOMOD/go-dundocs/raw/Lampiran/LAMPIRAN B JAWAPAN SOALAN NO.213.pdf", nil}, false},
+		{"happy path #3, Lisan", args{"raw/Lisan/SOALAN MULUT (1-20).pdf", &hansard.ExtractPDFOptions{NumPages: 10}}, false}, // has weird case in page 31
+		{"happy path #4, BukanLisan", args{"raw/BukanLisan/1 - 20.pdf", nil}, false},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {

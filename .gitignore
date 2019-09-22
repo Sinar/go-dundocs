@@ -25,6 +25,7 @@ dist/*
 raw/*
 split/*
 splitout/*
+internal/hansard/raw/
 
 # Ignore Goland
 .idea/*
