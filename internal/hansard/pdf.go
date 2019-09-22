@@ -16,14 +16,19 @@ type PDFPage struct {
 type PDFDocument struct {
 	NumPages   int
 	Pages      []PDFPage
-	sourcePath string
+	SourcePath string
+}
+
+type ExtractPDFOptions struct {
+	StartPage int
+	NumPages  int
 }
 
 const (
 	MaxLineProcessed = 10
 )
 
-func NewPDFDocument(pdfPath string) (*PDFDocument, error) {
+func NewPDFDocument(pdfPath string, options *ExtractPDFOptions) (*PDFDocument, error) {
 	f, r, err := pdf.Open(pdfPath)
 	defer func() {
 		_ = f.Close()
@@ -32,18 +37,27 @@ func NewPDFDocument(pdfPath string) (*PDFDocument, error) {
 		return nil, fmt.Errorf("PDFAccessErr: %w", err)
 	}
 
+	startPage := 1
 	totalPage := r.NumPage()
 	// DEBUG
 	totalPage = 3
+	if options != nil {
+		if options.StartPage > 1 {
+			startPage = options.StartPage
+		}
+		if options.NumPages > 0 {
+			totalPage = options.NumPages
+		}
+	}
 	var pdfPages []PDFPage
 	// Init it and fill it with the extracted info  earlier ..
 	pdfDoc := PDFDocument{
 		NumPages:   totalPage,
 		Pages:      pdfPages,
-		sourcePath: pdfPath,
+		SourcePath: pdfPath,
 	}
 
-	for pageIndex := 1; pageIndex <= totalPage; pageIndex++ {
+	for pageIndex := startPage; pageIndex <= totalPage; pageIndex++ {
 		p := r.Page(pageIndex)
 		if p.V.IsNull() {
 			continue

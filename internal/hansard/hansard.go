@@ -3,9 +3,9 @@ package hansard
 type HansardType int
 
 const (
-	LISAN HansardType = iota
-	BUKANLISAN
-	DEBAT
+	HANSARD_SPOKEN HansardType = iota
+	HANSARD_WRITTEN
+	HANSARD_DEBATE
 )
 
 type Hansard struct{}
