@@ -40,7 +40,7 @@ func NewPDFDocument(pdfPath string, options *ExtractPDFOptions) (*PDFDocument, e
 	startPage := 1
 	totalPage := r.NumPage()
 	// DEBUG
-	totalPage = 3
+	//totalPage = 3
 	if options != nil {
 		if options.StartPage > 1 {
 			startPage = options.StartPage
@@ -63,7 +63,11 @@ func NewPDFDocument(pdfPath string, options *ExtractPDFOptions) (*PDFDocument, e
 			continue
 		}
 		// New Page to be Processed ..
-		newPageProcessed := PDFPage{}
+		newPageProcessed := PDFPage{
+			PageNo:           pageIndex,
+			PDFTxtSameLines:  []string{},
+			PDFTxtSameStyles: []string{},
+		}
 		exerr := extractPDFPageContent(&newPageProcessed, p)
 		if exerr != nil {
 			panic(exerr)
@@ -78,26 +82,39 @@ func NewPDFDocument(pdfPath string, options *ExtractPDFOptions) (*PDFDocument, e
 func extractPDFPageContent(pdfPage *PDFPage, p pdf.Page) error {
 
 	rows, _ := p.GetTextByRow()
-	for _, row := range rows {
-		var contentPreview []string
-		exerr := extractContentPreviewByRow(row, &contentPreview, MaxLineProcessed)
+	contentPreview := make([]string, 0, 20)
+	for i, row := range rows {
+		// DEBUG
+		//fmt.Println("LINE: ", i)
+		exerr := extractContentPreviewByRow(row, &contentPreview)
 		if exerr != nil {
 			// HOWTO multi error?
 			//return &pdfDoc, fmt.Errorf(": %w", exerr)
 			panic(exerr)
 		}
+		if i > MaxLineProcessed {
+			//fmt.Println("Processed enough!! break!!")
+			break
+		}
 	}
+	pdfPage.PDFTxtSameLines = contentPreview
 
 	return nil
 }
 
-func extractContentPreviewByRow(row *pdf.Row, contentPreview *[]string, i int) error {
+func extractContentPreviewByRow(row *pdf.Row, contentPreview *[]string) error {
 	// Use it in another function ...
+	var currentContentLine string
 	//		println(">>>> row: ", row.Position)
-	//		for _, word := range row.Content {
-	//			fmt.Println(word.S)
-	//		}
+	for _, word := range row.Content {
+		// DEBUG
+		//fmt.Println(word.S)
+		// Is trabnsformation needed?
+		currentContentLine += word.S
+	}
 	//	}
 
+	//fmt.Println(currentContentLine)
+	*contentPreview = append(*contentPreview, currentContentLine)
 	return nil
 }

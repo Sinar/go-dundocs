@@ -10,7 +10,6 @@ func Test_extractContentPreviewByRow(t *testing.T) {
 	type args struct {
 		row            *pdf.Row
 		contentPreview *[]string
-		i              int
 	}
 	// Get a few page from common PDF ..
 	tests := []struct {
@@ -22,7 +21,7 @@ func Test_extractContentPreviewByRow(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if err := extractContentPreviewByRow(tt.args.row, tt.args.contentPreview, tt.args.i); (err != nil) != tt.wantErr {
+			if err := extractContentPreviewByRow(tt.args.row, tt.args.contentPreview); (err != nil) != tt.wantErr {
 				t.Errorf("extractContentPreviewByRow() error = %v, wantErr %v", err, tt.wantErr)
 			}
 		})

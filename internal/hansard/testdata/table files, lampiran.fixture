@@ -1,15 +1,35 @@
-numpages: 3
+numpages: 2
 pages:
-- pageno: 0
+- pageno: 1
   pdfplaintext: ""
-  pdftxtsamelines: []
+  pdftxtsamelines:
+  - 'JUMLAH GRADUAN KUIS YANG BERJAYA MENCAPAI TAHAP YANG TERTINGGI '
+  - 'MENGIKUT KURSUS DARI TAHUN 2016 HINGGA 2018 '
+  - ' '
+  - '    '
+  - 'BIL FAKULTI TAHUN '
+  - '  '
+  - 'FPM - HKULTI PENGURUSAN FAN MUAMALADA 2016 2017 2018 '
+  - '1 2 4 1 '
+  - 'IJAZAH SARJANA PENTADBIRAN PERNIAGAAN (MUAMALAH) '
+  - '2 IJAZAH ANRJANA MUDA PENTADBIRAN PSARNIAGAAN DENGE 2 0 1 '
+  - 'E-DAGANG (KEPUJIAN) '
+  - '3 1 0 0 '
   pdftxtsamestyles: []
-- pageno: 0
+- pageno: 2
   pdfplaintext: ""
-  pdftxtsamelines: []
-  pdftxtsamestyles: []
-- pageno: 0
-  pdfplaintext: ""
-  pdftxtsamelines: []
+  pdftxtsamelines:
+  - '  '
+  - 'FSTM - AAKULTI SAINS & TEKNOFOGI MAKLUMLT 2016 2017 2018 '
+  - '1 MATAZAH SARJANA TEKNOIJGI MAKLULO 0 0 1 '
+  - '2 '
+  - 'OLOGI AZAH SARJANA MUDA TEKNIJMAKLUMAT (MULTIMEDIA) '
+  - '0 3 1 '
+  - '(KEPUJIAN) '
+  - '3 '
+  - 'IJAZAH SARJANA MUDA TEKNOLOGI MAKLUMAT (TEKNOLOGI '
+  - '0 1 2 '
+  - 'RANGKAIAN) (KEPUJIAN) '
+  - '4 '
   pdftxtsamestyles: []
 sourcepath: /Users/leow/GOMOD/go-dundocs/raw/Lampiran/LAMPIRAN B JAWAPAN SOALAN NO.213.pdf

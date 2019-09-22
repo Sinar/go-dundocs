@@ -1,23 +1,307 @@
-numpages: 5
+numpages: 19
 pages:
-- pageno: 0
+- pageno: 1
   pdfplaintext: ""
-  pdftxtsamelines: []
+  pdftxtsamelines:
+  - 'PERTANYAAN-AERTPNYAAN MULUT DARIPADA '
+  - 'Y.B. PUAN JAMALIAH BINTI JAMALUDDIN  '
+  - '(N36 BANDAR UTAMA) '
+  - ' '
+  - 'TAJUK : ISU KESIHATAN DAN KESELAMATAN DI KAWASAN TANAH  '
+  - '     TERBIAR '
+  - ' '
+  - '261.  .Aertanya kepada YB.B. Dato'' Menteri Besar:- '
+  - ' '
+  - 'a)     t ekiraSya terdapankawasan-tawasan kanah terbiar yang menyumbang kepada '
+  - ' nkesihataisu  seperti pembiakkan nyamuk ataupun haiwan liar seperti ular, '
+  - 'apakah tindakan yang boleh diambil oleh Kerajaan Negeri dengan kadar '
   pdftxtsamestyles: []
-- pageno: 0
+- pageno: 2
   pdfplaintext: ""
-  pdftxtsamelines: []
+  pdftxtsamelines:
+  - 'PERTANYAAN-AERTPNYAAN MULUT DARIPADA '
+  - 'Y.B. TUAN MOHD ZAWAWI BIN AHMAD MUGHNI  '
+  - '(N49 SUNGAI KANDIS) '
+  - ' '
+  - 'NIKAJUK : KEPERLUAN MENAIKTARAF KLIT-KLINIK DESA DI SELANGOR '
+  - ' '
+  - '262.  .Aertanya kepada YB.B. Dato'' Menteri Besar:- '
+  - ' '
+  - 'a)     ilpaAh langkah yang akan dan sudah di ambka jaaleh keraon dalam '
+  - ' inikenamraf kemudahan dan struktur klikta-rinik desa di Negr?kli Selangoe '
+  - ' '
+  - 'b)     hpakaA usaha kerajaan dalam menangklini isu kepadatan peikakit di ans-klinik '
   pdftxtsamestyles: []
-- pageno: 0
+- pageno: 3
   pdfplaintext: ""
-  pdftxtsamelines: []
+  pdftxtsamelines:
+  - ' '
+  - 'Jadual 1: Senarai  Klinik Desa Yang Telah Dinaiktaraf Di Negeri Selangor '
+  - ' '
+  - 'Bil Daerah KD naiktaraf KK '
+  - ' '
+  - '1. Sepang 1. KD Sepang ke KK Sepang '
+  - ' '
+  - '2. Kuala Selangor 1.  KDSg Tengi Kanan ke KK Sg Tengi '
+  - 'Kanan '
+  - '2. k Bukit Cherakah KDe KK Bukit Cherakah '
+  - ' '
+  - '3. Sabak Bernam 1. e MKDrbau Berdarah ke KK Merbau '
   pdftxtsamestyles: []
-- pageno: 0
+- pageno: 4
   pdfplaintext: ""
-  pdftxtsamelines: []
+  pdftxtsamelines:
+  - 'b) aermintPan perkhidmatan  kesihatan di Negeri Selangor  amatlah tinggi di '
+  - 'mana-nama fasiliti kesihatan  di negeri ini samada di klinik desa atau di klinik '
+  - 'kesihatan. Langkah-bgkah penamlanahbaikan yang telah dilaksanakan '
+  - 'mengikut keperluan di fasiliti kesihatahhtersebut. Antara usa a-usaha telah '
+  - 'dilaksanakan bagi menangani isu kepadatan pesakit di klinik desa, adalah '
+  - 'dengan; '
+  - ' bemmesarkan /memperluaskan bangunan klinik desa sedia ada  '
+  - 'dengan memohon dalam projek pembangunan BP0 6 setiap tahun; 0 '
+  - ' '
+  - ' eemperbaiki sistem tmmujanji di  klinik tersebut; '
+  - ' '
+  -  menambahkan bilangan anggon yang bertugas di klitaik –  nik desakli
   pdftxtsamestyles: []
-- pageno: 0
+- pageno: 5
   pdfplaintext: ""
-  pdftxtsamelines: []
+  pdftxtsamelines:
+  - 'PERTANYAAN-AERTPNYAAN MULUT DARIPADA '
+  - 'Y.B. PUAN LEE KEE HIONG  '
+  - '(N06 KUALA KUBU BAHARU) '
+  - ' '
+  - 'TAJUK : LEMBAGA PELAWAT HOSPITAL DAN PANEL PENASIHAT KLINIK  '
+  - '     N IHATAKESDI SELANGOR '
+  - ' '
+  - '263.  .Aertanya kepada YB.B. Dato'' Menteri Besar:- '
+  - ' '
+  - 'a)     kadaAh Kerajaan Negeri mempunyai maklumat mengenai status terkini '
+  - ' termasuk jumlah geruntukan Lembapa Pelawat Hospital di Selangor? Jika ya, '
+  - 'tiryatakan bun-butirnya. '
+  pdftxtsamestyles: []
+- pageno: 6
+  pdfplaintext: ""
+  pdftxtsamelines:
+  - 'PERTANYAAN-YERTPNAAAN MULUT DARIPADA '
+  - 'Y.B. PUAN ELIZABETH WONG KEAT PING  '
+  - '(N37 BUKIT LANJAN) '
+  - ' '
+  - 'TAJUK : PEMBANGUNAN MASJID DAN SURAU 2019 '
+  - ' '
+  - '264.  .Aertanya kepada YB.B. Dato'' Menteri Besar:- '
+  - ' '
+  - 'a)     aerapB Masjid yang akan dibina dengan bantuan Kerajaan Negeri dan Kerajaan '
+  - '  Susat pada tahun 2019?Pila senaraikan mengikut Daerah. '
+  - ' '
+  - 'b)     hdakaA Kerajaan Negeri mempunyai peruntukan untuk membantu membangun '
+  pdftxtsamestyles: []
+- pageno: 7
+  pdfplaintext: ""
+  pdftxtsamelines:
+  - 'PERTANYAAN-AERTPNYAAN MULUT DARIPADA '
+  - 'Y.B. PUAN WONG SIEW KI  '
+  - '(N27 BALAKONG) '
+  - ' '
+  - 'TAJUK : PROGRAM TUISYEN RAKYAT SELANGOR (PTRS) '
+  - ' '
+  - '265.  .Aertanya kepada YB.B. Dato'' Menteri Besar:- '
+  - ' '
+  - 'a)     hTRS Panya dilaksanakan selama satuutahun, manakala bdnya m riiasa-murid '
+  - '  erlu lebihpdaripada setahun untuk menyediakan diri mereka demi menghadapi '
+  - 'pemeriksaan SPM. Adakah program ini memang berkesan dan bagaimanakah '
+  - 'kerajaan mengkaji keberkesanannya? '
+  pdftxtsamestyles: []
+- pageno: 8
+  pdfplaintext: ""
+  pdftxtsamelines:
+  - 'PERTANYAAN-AERTPNYAAN MULUT DARIPADA '
+  - 'Y.B. PUAN ROZANA BINTI ZAINAL ABIDIN  '
+  - '(N09 PERMATANG) '
+  - ' '
+  - 'TAJUK : SEKOLAH RENDAH AGAMA (SRA) '
+  - ' '
+  - '266.  .Aertanya kepada YB.B. Dato'' Menteri Besar:- '
+  - ' '
+  - 'a)     aerapBkah jumlah yang diperuntukkan bagi penyelenggaraan dan baikpulih '
+  - ' taRA pada Shun ini? '
+  - ' '
+  - b)     hpakaA ada Borang Permohonan tuhas yang digunakan unkk  emohonm
+  pdftxtsamestyles: []
+- pageno: 9
+  pdfplaintext: ""
+  pdftxtsamelines:
+  - 'PERTANYAAN-AERTPNYAAN MULUT DARIPADA '
+  - 'Y.B. TUAN LAU WENG SAN  '
+  - '(N52 BANTING) '
+  - ' '
+  - 'TAJUK : PENGAMBILAN TANAH UNTUK PROJEK TALIAN PENGHANTARAN '
+  - '      KV 005LOJI JANAKUASA TADMAX DI PULAU INDAH KE PMU OLAK '
+  - '      LEMPIT '
+  - ' '
+  - '267.  riertanya kepada YB.B. Dato'' Mente.A Besar:- '
+  - ' '
+  - 'a)     afahDimkan Kerajaan Negeri telah meluluskan permohonan pengambilan tanah '
+  - ' Sntuk ini. uebahagian tanah yang terlibat terletak di Kampung Pulau, DUN '
+  pdftxtsamestyles: []
+- pageno: 10
+  pdfplaintext: ""
+  pdftxtsamelines:
+  - 'PERTANYAAN-T ERTAPYAAN MULUNDARIPADA '
+  - 'Y.B. TUAN AZMIZAM BIN ZAMAN HURI  '
+  - '(N46 PELABUHAN KLANG) '
+  - ' '
+  - 'TAJUK : MENAIKTARAF TAMAN PERUMAHAN '
+  - ' '
+  - '268.  .Aertanya kepada YB.B. Dato'' Menteri Besar:- '
+  - ' '
+  - 'a)     hdakaA Kerajaan Negeri bercadang untuk menaiktaraf taman perumahan yang '
+  - ' telah berusia eelebihi 30 tahun mkoran permasalahan infrastruktur dan '
+  - 'perparitan yang tidak diselenggara dengan baik? '
+  - ' '
+  pdftxtsamestyles: []
+- pageno: 11
+  pdfplaintext: ""
+  pdftxtsamelines:
+  - 'PERTANYAAN-AERTPNYAAN MULUT DARIPADA '
+  - 'Y.B. TUAN RONNIE LIU TIAN KHIEW  '
+  - '(N5A SUNG6I PELEK) '
+  - ' '
+  - 'TAJUK : MB INCOPORATED (MBI) '
+  - ' '
+  - '269.  .Aertanya kepada YB.B. Dato'' Menteri Besar:- '
+  - ' '
+  - 'a)     aadP 2018, berapa jumlah gaji yang diberikan untuk kai MBI?ngan pegawakita '
+  - ' '
+  - ' '
+  - 'JAWAPAN: '
+  pdftxtsamestyles: []
+- pageno: 12
+  pdfplaintext: ""
+  pdftxtsamelines:
+  - 'PERTANYAAN-AERTPNYAAN MULUT DARIPADA '
+  - 'Y.B. PUAN JAMALIAH BINTI JAMALUDDIN  '
+  - '(N36 BANDAR UTAMA) '
+  - ' '
+  - 'TAJUK : PROGRAM AIR PERCUMA '
+  - ' '
+  - '270.  .Aertanya kepada YB.B. Dato'' Menteri Besar:- '
+  - ' '
+  - 'a)     Selepas nenjajaran semula peruptukan Program Air Percuma, fokus diberi '
+  - ' gpada keolongan B40. Apakah tafsiran golongan B40 yang dipersetujui oleh '
+  - 'Kerajaan Negeri Selangor dalam program air percuma ini? Adakah hanya '
+  - 'mereka yang berdaftar atau betaa dalam darad E-Kasih? '
+  pdftxtsamestyles: []
+- pageno: 13
+  pdfplaintext: ""
+  pdftxtsamelines:
+  - ' '
+  - '(iii) nePdaftaran berterusan E-kasih aKan dilaksanakan bagi pengguna '
+  - 'yang belum didaftarkan; '
+  - ' '
+  - '(iv) daKar minimum pendapatan isi rumah bagi Penjajaran Semula Inisiatif '
+  - 'Peduli Rakyat (IPR) Untuk Program bemPerian 20 Meter Padu Air '
+  - 'Percuma  ditetapkan pada RM2,000.00 sebulan; dan '
+  - ' '
+  - '(v) jelaenPsan terperinci hendaklah diberikan kepada rakyat Negeri '
+  - 'Selangor melalui upblic engagement   ang dibuat olehyAir Selangor '
+  - 'gelibatkan semua Ahli Dewan Negeri Selangor, Penmhulu dan Ketua '
+  - liampung menerusi Pejabat Tanah dan Daerah, AhK- hli Majlis dana
+  pdftxtsamestyles: []
+- pageno: 14
+  pdfplaintext: ""
+  pdftxtsamelines:
+  - ' '
+  - 'Bagi nama-Eama yang tidak ada dnlam a- asih, semakanKakan dibuat '
+  - 'menggunakan data penerima Bantuan Sara Hidup (BSH) daripada Lembaga '
+  - 'Hasil Dalam Negeri (LHDN).  Mengikut rekod  BSH data tahun 2018, '
+  - dianggarkan seramai 400,000 nama layak mendaparmanfaat Progt  am
+  - 'Pemberian Air Percuma ini, namun padanan data akan dilaksanakan dengan '
+  - 'rekod akaun pengebilan di Air Selangor. '
+  - ' '
+  - Pada masa yang sama, Kerajaan Negeri memohon kerjasamli dari semua Aha-
+  - 'ahli Yang Berhormat supaya dapat menggalakkan semua penaguna yang laygk '
+  - 'untuk mendaftar dengan EKasih dan LHDN bagi memastikan mereka boleh '
+  - 'secara automatik menikmati Program Air Percuma ini. '
+  pdftxtsamestyles: []
+- pageno: 15
+  pdfplaintext: ""
+  pdftxtsamelines:
+  - 'PERTANYAAN-AERTPNYAAN MULUT DARIPADA '
+  - 'Y.B. PUAN LEE KEE HIONG  '
+  - '(N06 KUALA KUBU BAHARU) '
+  - ' '
+  - 'TAJUK : KAEDAH MENGHAPUSKAN NYAMUK AEDES '
+  - ' '
+  - '271.  .Aertanya kepada YB.B. Dato'' Menteri Besar:- '
+  - ' '
+  - 'a)     nNyataka aedah menghapuskan nykamuk Aedes yang digunakan sejak tahun '
+  - ' 2018? '
+  - ' '
+  - 'b)     kadaAh Kerajaan Negeri akan menggunakan kaedah baru untuk '
+  pdftxtsamestyles: []
+- pageno: 16
+  pdfplaintext: ""
+  pdftxtsamelines:
+  - ' '
+  - '2. Langkah-ncengkah pelagahan adalah seperti: '
+  - ' '
+  - 'i. aemPntauan indeks pembiakan Aedes di kawasan berisiko tinggi '
+  - 'denggi dan kawasannumpua t awam; '
+  - 'ii. nelaksaMakan aktiviti Penghapusan Tempat Pemsiakan Aedeb '
+  - 'kawasan berisiko tinggi denggi dan kawasan tumpuan awam; '
+  - 'iii. aelaksanMkan Semburan Kabus )(fogingg nencegahap di kawasan '
+  - 'yang mempunyai indeks pembiakan Aedes yang tinggi; '
+  - 'iv. nelaksaMakan aktiviti aenguatkuaspan Akta Pemusnahan Serangga '
+  - '5embawa Penyakit 197P; dan '
+  - 'v.  elaksanakan aktiviti PendidikanMKesihatan kepada komuniti '
+  pdftxtsamestyles: []
+- pageno: 17
+  pdfplaintext: ""
+  pdftxtsamelines:
+  - ' endedahan dan latihan yang diadakan olehpKerajaan Negeri. Di '
+  - 'antara aktiviti utama nang akay dilaksanakan adalah; '
+  - ' '
+  - ' jalaenMnkan alert kes dan wablehk demam dengPi oa gejabat '
+  - 'Knesihata Daerah npada jabatake yang terlibat nntuk tindakau '
+  - 'kawalan dan pencegahan; '
+  -  jalaenMnkan Pemusnahan TempaePembiakan Aedt s di  mpatte
+  - 'kerja secara berkala; '
+  - ' uewMjudkan jaringan maklumat berkaitan situasi demam denggi di '
+  - 'Fmpat kerja seperti melalui Whatsapp, tekcebooa d nalina-lain; '
+  - ' uewMjudkan kumpulan sukarelawan denggi menggunakan konsep '
+  - 'tyorate Social ResponsibiliCorp (CSR) id alangan wkarga tempat '
+  pdftxtsamestyles: []
+- pageno: 18
+  pdfplaintext: ""
+  pdftxtsamelines:
+  - 'PERTANYAAN-AERTPNYAAN MULUT DARIPADA '
+  - 'Y.B. PUAN JAMALIAH BINTI JAMALUDDIN  '
+  - '(N36 BANDAR UTAMA) '
+  - ' '
+  - 'TAJUK : RANCANGAN PROJEK PENGUKUHAN DAN PENAIKTARAFAN DI  '
+  - '     KUNGAI SAYU ARA '
+  - ' '
+  - '272.  .Aertanya kepada YB.B. Dato'' Menteri Besar:- '
+  - ' '
+  - 'a)     la SeJPSngor telah membuat kajian Projek Pengukuhan Tebing Sungai Kayu '
+  - ' Ara serta isu-mbanjir disitu. Kajian isu embuktikan penrojekngnya pti-projek '
+  - 'penaiktarafan brsebut dilaksanakan teagi mengelak isu banjir dan hakisan '
+  pdftxtsamestyles: []
+- pageno: 19
+  pdfplaintext: ""
+  pdftxtsamelines:
+  - 'PERTANYAAN-AERTPNYAAN MULUT DARIPADA '
+  - 'Y.B. PUAN JAMALIAH BINTI JAMALUDDIN  '
+  - '(N36 BANDAR UTAMA) '
+  - ' '
+  - 'TAJUK : ISU KESIHATAN DAN KESELAMATAN DI KAWASAN TANAH  '
+  - '     TERBIAR '
+  - ' '
+  - '261.  .Aertanya kepada YB.B. Dato'' Menteri Besar:- '
+  - ' '
+  - 'a)     t ekiraSya terdapankawasan-tawasan kanah terbiar yang menyumbang kepada '
+  - ' nkesihataisu  seperti pembiakkan nyamuk ataupun haiwan liar seperti ular, '
+  - 'apakah tindakan yang boleh diambil oleh Kerajaan Negeri dengan kadar '
   pdftxtsamestyles: []
 sourcepath: /Users/leow/GOMOD/go-dundocs/raw/Lisan/SOALAN MULUT (261-272).pdf

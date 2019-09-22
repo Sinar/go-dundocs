@@ -24,13 +24,12 @@ func TestNewPDFDocument(t *testing.T) {
 	tests := []struct {
 		name    string
 		args    args
-		want    *hansard.PDFDocument
 		wantErr bool
 	}{
-		{"missing file, xerrors", args{"testdata/bogus.pdf", nil}, nil, true},
-		{"happy path #1, Lisan", args{"/Users/leow/GOMOD/go-dundocs/raw/Lisan/SOALAN MULUT (261-272).pdf", &hansard.ExtractPDFOptions{NumPages: 5}}, &hansard.PDFDocument{NumPages: 18}, false},
-		{"happy path #2, BukanLisan", args{"/Users/leow/GOMOD/go-dundocs/raw/BukanLisan/41 - 60.pdf", nil}, &hansard.PDFDocument{NumPages: 39}, false},
-		{"table files, lampiran", args{"/Users/leow/GOMOD/go-dundocs/raw/Lampiran/LAMPIRAN B JAWAPAN SOALAN NO.213.pdf", nil}, &hansard.PDFDocument{NumPages: 2}, false},
+		{"missing file, xerrors", args{"testdata/bogus.pdf", nil}, true},
+		{"happy path #1, Lisan", args{"/Users/leow/GOMOD/go-dundocs/raw/Lisan/SOALAN MULUT (261-272).pdf", &hansard.ExtractPDFOptions{NumPages: 19}}, false},
+		{"happy path #2, BukanLisan", args{"/Users/leow/GOMOD/go-dundocs/raw/BukanLisan/41 - 60.pdf", nil}, false},
+		{"table files, lampiran", args{"/Users/leow/GOMOD/go-dundocs/raw/Lampiran/LAMPIRAN B JAWAPAN SOALAN NO.213.pdf", nil}, false},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
@@ -74,8 +73,8 @@ func TestNewPDFDocument(t *testing.T) {
 				t.Fatalf("Unmarsahl FAIL: %s", umerr.Error())
 			}
 
-			if diff := cmp.Diff(got, want); diff != "" {
-				t.Errorf("TestNewPDFDocument() mismatch (-actual +want):\n%s", diff)
+			if diff := cmp.Diff(want, got); diff != "" {
+				t.Errorf("TestNewPDFDocument() mismatch (-want +got):\n%s", diff)
 			}
 
 			//if !reflect.DeepEqual(got, want) {
