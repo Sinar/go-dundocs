@@ -13,8 +13,8 @@ import (
 	"github.com/Sinar/go-dundocs/internal/hansard"
 )
 
-var updateHansard = flag.Bool("update", false, "update Hansard .golden files")
-var updateHansardPDF = flag.Bool("updatePDF", false, "update Hansard .fixture PDFs")
+var updateHansard = flag.Bool("updateHansard", false, "update Hansard .golden files")
+var updateHansardPDF = flag.Bool("updateHansardPDF", false, "update Hansard .fixture PDFs")
 
 func TestNewHansardQuestions(t *testing.T) {
 	type args struct {
@@ -45,8 +45,8 @@ func TestNewHansardQuestions(t *testing.T) {
 
 func TestNewHansardDocument(t *testing.T) {
 	type args struct {
-		sessionName string
-		pdfPath     string
+		fixtureLabel string
+		pdfPath      string
 	}
 	tests := []struct {
 		name    string
@@ -54,20 +54,23 @@ func TestNewHansardDocument(t *testing.T) {
 		want    *hansard.HansardDocument
 		wantErr bool
 	}{
-		{"happy #1", args{"", ""}, nil, false},
-		{"happy #1", args{"", ""}, nil, false},
-		{"happy #1", args{"", ""}, nil, false},
-		{"happy #1", args{"", ""}, nil, false},
-		{"happy #1", args{"", ""}, nil, false},
-		{"happy #1", args{"", ""}, nil, false},
+		{"happy #1", args{"HDOC-Lisan-1-20", "raw/Lisan/SOALAN MULUT (1-20).pdf"}, nil, false},
+		{"happy #2", args{"HDOC-BukanLisan-1-20", "raw/BukanLisan/1 - 20.pdf"}, nil, false},
+		//{"happy #1", args{"", ""}, nil, false},
+		//{"happy #1", args{"", ""}, nil, false},
+		//{"happy #1", args{"", ""}, nil, false},
+		//{"happy #1", args{"", ""}, nil, false},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got, err := hansard.NewHansardDocument(tt.args.sessionName, tt.args.pdfPath)
-			if (err != nil) != tt.wantErr {
-				t.Errorf("NewHansardDocument() error = %v, wantErr %v", err, tt.wantErr)
-				return
-			}
+			hansardDocument := hansard.HansardDocument{StateAssemblySession: "testSessionName"}
+			pdfDoc := loadPDFFromFixture(t, tt.args.fixtureLabel, tt.args.pdfPath)
+			got := hansard.NewHansardDocumentContent(pdfDoc, &hansardDocument)
+			//got, err := hansard.NewHansardDocument("sessionName", tt.args.pdfPath)
+			//if (err != nil) != tt.wantErr {
+			//	t.Errorf("NewHansardDocument() error = %v, wantErr %v", err, tt.wantErr)
+			//	return
+			//}
 			if !reflect.DeepEqual(got, tt.want) {
 				t.Errorf("NewHansardDocument() got = %v, want %v", got, tt.want)
 			}

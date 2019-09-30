@@ -7,10 +7,11 @@ import (
 	"path/filepath"
 	"testing"
 
+	"github.com/sanity-io/litter"
+
 	"github.com/google/go-cmp/cmp"
 
 	"github.com/Sinar/go-dundocs/internal/hansard"
-	"github.com/sanity-io/litter"
 	"gopkg.in/yaml.v2"
 )
 

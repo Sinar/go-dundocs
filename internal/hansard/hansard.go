@@ -26,57 +26,48 @@ type HansardDocument struct {
 }
 
 func NewHansardDocument(sessionName string, pdfPath string) (*HansardDocument, error) {
-	hansardDoc := HansardDocument{StateAssemblySession: sessionName}
 	// Load the PDFDoc; should we check length?
 	pdfDoc, err := NewPDFDocument(pdfPath, nil)
 	if err != nil {
 		return nil, err
 	}
-	// Detect HansardType from the first page ... and fill it up ..
-	if len(pdfDoc.Pages) < 1 {
-		return nil, fmt.Errorf("Needs to have at least one page to be considered a valid Hansard!!!", len(pdfDoc.Pages))
+	// Process the  HansardDoc ..
+	hansardDoc := HansardDocument{StateAssemblySession: sessionName}
+	cerr := NewHansardDocumentContent(pdfDoc, &hansardDoc)
+	if cerr != nil {
+		return nil, cerr
 	}
-	hansardDoc.HansardType = detectHansardType(pdfDoc.Pages[0])
-	hansardQuestions := make([]HansardQuestion, 0, 20)
-	hqerr := NewHansardQuestions(pdfDoc, &hansardQuestions)
-	if hqerr != nil {
-		return nil, hqerr
-	}
-	// Fill up the questions ...
-	hansardDoc.HansardQuestions = hansardQuestions
-
+	// Any post processing??
 	return &hansardDoc, nil
 }
 
-func detectHansardType(firstPage PDFPage) HansardType {
-
+func detectHansardType(firstPage PDFPage) (HansardType, error) {
 	// default value ..
-	return HANSARD_SPOKEN
+
+	// Is this fatal?
+	return -1, fmt.Errorf("could not detect a type")
 }
 
-func NewHansardQuestions(pdfDoc *PDFDocument, hansardQuestions *[]HansardQuestion) error {
-	// Iterate through all pages
-	for _, r := range pdfDoc.Pages {
-		// Init a new hansardQuestion struct
-		hansardQuestion := HansardQuestion{PageNumStart: r.PageNo}
-		for _, rowContent := range r.PDFTxtSameLines {
-			if isStartOfQuestionSection(rowContent) {
-				foundQuestionNum, exerr := extractQuestionNum(rowContent)
-				fmt.Println("FOUND Question %s in page %d", foundQuestionNum, r.PageNo)
-				if exerr != nil {
-					return exerr
-				}
-				if foundQuestionNum != "" {
-					// fill it in, the foundQuestionNum; need to strip?
-					hansardQuestion.QuestionNum = strings.TrimSpace(foundQuestionNum)
-					*hansardQuestions = append(*hansardQuestions, hansardQuestion)
-					break
-				}
-			}
-			// Update end page num as we go along ..
-			hansardQuestion.PageNumEnd = r.PageNo
-		}
+func NewHansardDocumentContent(pdfDoc *PDFDocument, hansardDoc *HansardDocument) error {
+	// validation checks
+	if len(pdfDoc.Pages) < 1 {
+		return fmt.Errorf("Needs at least one page for valid Hansard!!! Found: %d", len(pdfDoc.Pages))
 	}
+	// Detect HansardType from the first page ... and fill it up ..
+	hansardType, derr := detectHansardType(pdfDoc.Pages[0])
+	if derr != nil {
+		return derr
+	}
+	hansardDoc.HansardType = hansardType
+	// Extract out Questions metadata for all pages ..
+	hansardQuestions := make([]HansardQuestion, 0, 20)
+	hqerr := NewHansardQuestions(pdfDoc, &hansardQuestions)
+	if hqerr != nil {
+		return hqerr
+	}
+	// Fill up the questions ...
+	hansardDoc.HansardQuestions = hansardQuestions
+	// All OK?
 	return nil
 }
 
@@ -98,4 +89,34 @@ func extractQuestionNum(rowContent string) (string, error) {
 	// pattern to look out for is
 	// <digit>.  Bertanya kepada ...
 	return foundQuestionNum, nil
+}
+
+func NewHansardQuestions(pdfDoc *PDFDocument, hansardQuestions *[]HansardQuestion) error {
+	if pdfDoc == nil {
+		return fmt.Errorf("pdfDoc is nil!")
+	}
+	// Iterate through all pages
+	for _, r := range pdfDoc.Pages {
+		// Init a new hansardQuestion struct
+		hansardQuestion := HansardQuestion{PageNumStart: r.PageNo}
+		for _, rowContent := range r.PDFTxtSameLines {
+			if isStartOfQuestionSection(rowContent) {
+				foundQuestionNum, exerr := extractQuestionNum(rowContent)
+				// DEBUG ..
+				fmt.Println(fmt.Sprintf("FOUND Question %s in page %d", foundQuestionNum, r.PageNo))
+				if exerr != nil {
+					return exerr
+				}
+				if foundQuestionNum != "" {
+					// fill it in, the foundQuestionNum; need to strip?
+					hansardQuestion.QuestionNum = strings.TrimSpace(foundQuestionNum)
+					*hansardQuestions = append(*hansardQuestions, hansardQuestion)
+					break
+				}
+			}
+			// Update end page num as we go along ..
+			hansardQuestion.PageNumEnd = r.PageNo
+		}
+	}
+	return nil
 }
