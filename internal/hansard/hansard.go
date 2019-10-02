@@ -71,7 +71,7 @@ func NewHansardDocumentContent(pdfDoc *PDFDocument, hansardDoc *HansardDocument)
 	return nil
 }
 
-func isStartOfQuestionSection(rowContent string) bool {
+func isStartOfQuestionSection(rowContents []string) bool {
 
 	// Look out for pertanyaan pattern
 
@@ -99,8 +99,8 @@ func NewHansardQuestions(pdfDoc *PDFDocument, hansardQuestions *[]HansardQuestio
 	for _, r := range pdfDoc.Pages {
 		// Init a new hansardQuestion struct
 		hansardQuestion := HansardQuestion{PageNumStart: r.PageNo}
-		for _, rowContent := range r.PDFTxtSameLines {
-			if isStartOfQuestionSection(rowContent) {
+		if isStartOfQuestionSection(r.PDFTxtSameLines) {
+			for _, rowContent := range r.PDFTxtSameLines {
 				foundQuestionNum, exerr := extractQuestionNum(rowContent)
 				// DEBUG ..
 				fmt.Println(fmt.Sprintf("FOUND Question %s in page %d", foundQuestionNum, r.PageNo))
@@ -114,9 +114,9 @@ func NewHansardQuestions(pdfDoc *PDFDocument, hansardQuestions *[]HansardQuestio
 					break
 				}
 			}
-			// Update end page num as we go along ..
-			hansardQuestion.PageNumEnd = r.PageNo
 		}
+		// Update end page num as we go along ..
+		hansardQuestion.PageNumEnd = r.PageNo
 	}
 	return nil
 }
