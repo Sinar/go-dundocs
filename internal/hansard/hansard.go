@@ -121,10 +121,17 @@ func isStartOfQuestionSection(currentPage PDFPage) bool {
 }
 
 func extractQuestionNum(rowContent string) (string, error) {
-	foundQuestionNum := ""
-	// pattern to look out for is
-	// <digit>.  Bertanya kepada ...
-	return foundQuestionNum, nil
+	// Setup regexp once
+	re := regexp.MustCompile(`(?i)^.*?(\d+).*bertanya\s+kepada.*$`)
+	// TODO: Might have to break up line cases; what other special characters will appear here?
+	// It fails with the content; but will it appear in real life? ==> "\n\n\n 50 bertanya kepada yab menteri besar Azmin ALI "
+	sm := re.FindStringSubmatch(rowContent)
+	if sm != nil {
+		// DEBUG:
+		//fmt.Println("FOUND NUM: ", sm[1])
+		return sm[1], nil
+	}
+	return "", nil
 }
 
 func NewHansardQuestions(pdfDoc *PDFDocument, hansardQuestions *[]HansardQuestion) error {

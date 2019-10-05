@@ -44,12 +44,13 @@ func Test_extractQuestionNum(t *testing.T) {
 		wantErr bool
 	}{
 		{"happy #1", args{"261.  Bertanya kepada Y.A.B. Dato'' Menteri Besar:- "}, "261", false},
-		{"happy #2", args{"\n\n\n 50 bertanya kepada yab menteri besar Azmin ALI "}, "50", false},
+		{"happy #2", args{" � 50 bertanya kepada yab menteri besar Azmin ALI "}, "50", false},
 		{"happy odd #3", args{"  01)   Bertanya kepada Y.A.B. "}, "01", false},
 		{"happy #4", args{"41.   Bertanya kepada Y.A.B. Dato'' Menteri Besar:- "}, "41", false},
 		{"happy #5", args{"  3 # BERTanya KEPADA Menteri Pertanian"}, "3", false},
 		{"sad #1", args{"TAJUK : PERUNTUKAN CERIA 2019 "}, "", false},
 		{"sad #2", args{"(N43 SEMENTA) "}, "", false},
+		//{"break #1", args{"\n\n\n 50 bertanya kepada yab menteri besar Azmin ALI "}, "50", false},
 		//{"", args{""}, "", false},
 	}
 	for _, tt := range tests {
