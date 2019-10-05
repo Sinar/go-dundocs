@@ -25,7 +25,8 @@ func Test_isStartOfQuestionSection(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := isStartOfQuestionSection(tt.args.rowContents); got != tt.want {
+			pdfPage := PDFPage{PDFTxtSameLines: tt.args.rowContents}
+			if got := isStartOfQuestionSection(pdfPage); got != tt.want {
 				t.Errorf("isStartOfQuestionSection() = %v, want %v", got, tt.want)
 			}
 		})

@@ -9,7 +9,8 @@ import (
 type HansardType int
 
 const (
-	HANSARD_SPOKEN HansardType = iota
+	HANSARD_INVALID HansardType = iota
+	HANSARD_SPOKEN
 	HANSARD_WRITTEN
 	HANSARD_DEBATE
 )
@@ -48,14 +49,14 @@ func detectHansardType(firstPage PDFPage) (HansardType, error) {
 		// Look  out for pertanyaan
 		hasQuestion, err := regexp.MatchString("pertanyaan", normalizedContent)
 		if err != nil {
-			return -1, err
+			return HANSARD_INVALID, err
 		}
 		if hasQuestion {
 			// Has potential; do the further checks ..
 			// Look out for mulut
 			hasSpokenHansardType, serr := regexp.MatchString("mulut", normalizedContent)
 			if serr != nil {
-				return -1, serr
+				return HANSARD_INVALID, serr
 			}
 			// If found match; get out IMMEDIATELY!
 			if hasSpokenHansardType {
@@ -64,15 +65,15 @@ func detectHansardType(firstPage PDFPage) (HansardType, error) {
 			// Look out for tulis
 			hasWrittenHansardType, werr := regexp.MatchString("tulis", normalizedContent)
 			if werr != nil {
-				return -1, werr
+				return HANSARD_INVALID, werr
 			}
 			if hasWrittenHansardType {
 				return HANSARD_WRITTEN, nil
 			}
 		}
 	}
-	// If get here without a match, no type FOUND!
-	return -1, fmt.Errorf("could not detect a type")
+	// If get here without a match, no type FOUND! INVALID default ..
+	return HANSARD_INVALID, nil
 }
 
 func NewHansardDocumentContent(pdfDoc *PDFDocument, hansardDoc *HansardDocument) error {
@@ -98,17 +99,25 @@ func NewHansardDocumentContent(pdfDoc *PDFDocument, hansardDoc *HansardDocument)
 	return nil
 }
 
-func isStartOfQuestionSection(rowContents []string) bool {
+func isStartOfQuestionSection(currentPage PDFPage) bool {
 
 	// Look out for pertanyaan pattern
-
+	hansardType, err := detectHansardType(currentPage)
+	if err != nil {
+		panic(err)
+	}
+	if hansardType == HANSARD_INVALID {
+		return false
+	}
+	// More sophisticated checks later ?? If ever ..
+	// At this point we know if it is SPOKEN, WRITTEn etc?
 	// Look for question number pattern
 
 	// Look for topic
 
 	// Look for who ask for it ..
 
-	return false
+	return true
 }
 
 func extractQuestionNum(rowContent string) (string, error) {
@@ -126,7 +135,7 @@ func NewHansardQuestions(pdfDoc *PDFDocument, hansardQuestions *[]HansardQuestio
 	for _, r := range pdfDoc.Pages {
 		// Init a new hansardQuestion struct
 		hansardQuestion := HansardQuestion{PageNumStart: r.PageNo}
-		if isStartOfQuestionSection(r.PDFTxtSameLines) {
+		if isStartOfQuestionSection(r) {
 			for _, rowContent := range r.PDFTxtSameLines {
 				foundQuestionNum, exerr := extractQuestionNum(rowContent)
 				// DEBUG ..
