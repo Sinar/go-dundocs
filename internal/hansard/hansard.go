@@ -2,6 +2,7 @@ package hansard
 
 import (
 	"fmt"
+	"regexp"
 	"strings"
 )
 
@@ -42,9 +43,35 @@ func NewHansardDocument(sessionName string, pdfPath string) (*HansardDocument, e
 }
 
 func detectHansardType(firstPage PDFPage) (HansardType, error) {
-	// default value ..
-
-	// Is this fatal?
+	for _, rowContent := range firstPage.PDFTxtSameLines {
+		normalizedContent := strings.ToLower(rowContent)
+		// Look  out for pertanyaan
+		hasQuestion, err := regexp.MatchString("pertanyaan", normalizedContent)
+		if err != nil {
+			return -1, err
+		}
+		if hasQuestion {
+			// Has potential; do the further checks ..
+			// Look out for mulut
+			hasSpokenHansardType, serr := regexp.MatchString("mulut", normalizedContent)
+			if serr != nil {
+				return -1, serr
+			}
+			// If found match; get out IMMEDIATELY!
+			if hasSpokenHansardType {
+				return HANSARD_SPOKEN, nil
+			}
+			// Look out for tulis
+			hasWrittenHansardType, werr := regexp.MatchString("tulis", normalizedContent)
+			if werr != nil {
+				return -1, werr
+			}
+			if hasWrittenHansardType {
+				return HANSARD_WRITTEN, nil
+			}
+		}
+	}
+	// If get here without a match, no type FOUND!
 	return -1, fmt.Errorf("could not detect a type")
 }
 
