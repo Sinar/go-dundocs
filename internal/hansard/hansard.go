@@ -138,11 +138,16 @@ func NewHansardQuestions(pdfDoc *PDFDocument, hansardQuestions *[]HansardQuestio
 	if pdfDoc == nil {
 		return fmt.Errorf("pdfDoc is nil!")
 	}
+	var hansardQuestion *HansardQuestion
 	// Iterate through all pages
 	for _, r := range pdfDoc.Pages {
-		// Init a new hansardQuestion struct
-		hansardQuestion := HansardQuestion{PageNumStart: r.PageNo}
 		if isStartOfQuestionSection(r) {
+			// Special case: first round ..
+			if hansardQuestion != nil {
+				*hansardQuestions = append(*hansardQuestions, *hansardQuestion)
+			}
+			// Init a new hansardQuestion struct
+			hansardQuestion = &HansardQuestion{PageNumStart: r.PageNo}
 			for _, rowContent := range r.PDFTxtSameLines {
 				foundQuestionNum, exerr := extractQuestionNum(rowContent)
 				// DEBUG ..
@@ -153,7 +158,6 @@ func NewHansardQuestions(pdfDoc *PDFDocument, hansardQuestions *[]HansardQuestio
 				if foundQuestionNum != "" {
 					// fill it in, the foundQuestionNum; need to strip?
 					hansardQuestion.QuestionNum = strings.TrimSpace(foundQuestionNum)
-					*hansardQuestions = append(*hansardQuestions, hansardQuestion)
 					break
 				}
 			}
