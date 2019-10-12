@@ -165,5 +165,9 @@ func NewHansardQuestions(pdfDoc *PDFDocument, hansardQuestions *[]HansardQuestio
 		// Update end page num as we go along ..
 		hansardQuestion.PageNumEnd = r.PageNo
 	}
+	// Special case: first round ..
+	if hansardQuestion != nil {
+		*hansardQuestions = append(*hansardQuestions, *hansardQuestion)
+	}
 	return nil
 }

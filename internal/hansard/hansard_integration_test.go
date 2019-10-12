@@ -32,8 +32,8 @@ func TestNewHansardQuestions(t *testing.T) {
 		//{"case #2", args{"HDOC-Lisan-1-20", "raw/Lisan/SOALAN MULUT (1-20).pdf", nil}, false},
 		{"case #3", args{"HDOC-BukanLisan-1-20", "raw/BukanLisan/1 - 20.pdf", &[]hansard.HansardQuestion{{"1", 1, 1}, {"2", 2, 2}, {"3", 3, 5}}}, false},
 		//{"case #4", args{"HDOC-BukanLisan-1-20", "raw/BukanLisan/1 - 20.pdf", nil}, false},
-		{"sad #1", args{"HDOC-Lisan-1-20", "raw/Lisan/SOALAN MULUT (1-20).pdfa", nil}, true},
-		{"sad #2", args{"HDOC-BukanLisan-1-20", "raw/BukanLisan/1 - 20b.pdf", nil}, true},
+		{"sad #1", args{"Bad-HDOC-Lisan-1-20", "raw/Lisan/SOALAN MULUT (1-20).pdfa", nil}, true},
+		{"sad #2", args{"Bad-HDOC-BukanLisan-1-20", "raw/BukanLisan/1 - 20b.pdf", nil}, true},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
