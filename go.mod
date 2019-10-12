@@ -3,6 +3,7 @@ module github.com/Sinar/go-dundocs
 go 1.12
 
 require (
+	github.com/davecgh/go-spew v1.1.1
 	github.com/fatih/color v1.7.0 // indirect
 	github.com/google/go-cmp v0.3.1
 	github.com/ledongthuc/pdf v0.0.0-20190830105003-8ac343ec9fdd

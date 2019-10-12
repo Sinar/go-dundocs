@@ -1,9 +1,40 @@
 numpages: 39
 pages:
-- pageno: 1
+- pageno: 18
   pdfplaintext: ""
   pdftxtsamelines:
   - 'PERTANYAAN-PERTANYAAN MULUT DARIPADA '
+  - 'Y.B. PUAN MICHELLE NG MEI SZE  '
+  - '(N31 SUBANG JAYA) '
+  - 'TAJUK : PEMBUANGAN SISA KE DALAM LONGKANG '
+  - '8.  Bertanya kepada Y.A.B. Dato'' Menteri Besar:- '
+  - 'a)     '
+  - 'Apakah dasar Kerajaan Selangor untuk menyelesaikan masalah pembuangan '
+  - 'sisa oleh peniaga-peniaga (terutamanya peniaga restoran) ke dalam longkang? '
+  - 'JAWAPAN: '
+  - 'a) Bagi menyelesaikan masalah pembuangan sisa oleh peniaga-peniaga '
+  - '(terutama peniaga restoran) ke dalam longkang, setiap Pihak Berkuasa '
+  - T
+  pdftxtsamestyles: []
+- pageno: 19
+  pdfplaintext: ""
+  pdftxtsamelines:
+  - 'PERTANYAAN-PERTANYAAN MULUT DARIPADA '
+  - 'Y.B. TUAN AHMAD MUSTAIN BIN OTHMAN  '
+  - '(N02 SABAK) '
+  - 'TAJUK : MASALAH PERTANIAN '
+  - '9.  Bertanya kepada Y.A.B. Dato'' Menteri Besar:- '
+  - 'a)     '
+  - 'Mengapa hasil padi masih gagal melepasi sasaran yang ditetapkan oleh '
+  - 'jabatan? Adakah perlu tindakan kepada petani yang tidak mematuhi S.O.P '
+  - 'yang ditetapkan oleh jabatan? '
+  - 'b)     '
+  - 'Perlukah pentadbiran (PPK) yang gagal berfungsi untuk dirombak semula? '
+  pdftxtsamestyles: []
+- pageno: 1
+  pdfplaintext: ""
+  pdftxtsamelines:
+  - 'Saya Bertanya adakah '
   - '(N43 SEMENTA) '
   - 'TAJUK : PERUNTUKAN UNTUK MEMBERDAYAKAN PUSAT WANITA '
   - 'a)     '
@@ -58,93 +89,6 @@ pages:
   - '1 September 2018 '
   - "8"
   pdftxtsamestyles: []
-- pageno: 5
-  pdfplaintext: ""
-  pdftxtsamelines:
-  - 'PERTANYAAN-PERTANYAAN MULUT DARIPADA '
-  - 'Y.B. PUAN JAMALIAH BINTI JAMALUDDIN  '
-  - '(N36 BANDAR UTAMA) '
-  - 'TAJUK : PENAMBAHBAIKKAN SISTEM TRAFIK DAN PENGANGKUTAN AWAM '
-  - 'DI SELANGOR '
-  - 'Apakah pelan-pelan terkini bagi penambahbaikkan sistem trafik dan '
-  - 'pengangkutan awam di Selangor yang terkini, terutamanya di kawasan bandar '
-  - 'seperti Bandar Utama? '
-  - 'b)     '
-  pdftxtsamestyles: []
-- pageno: 6
-  pdfplaintext: ""
-  pdftxtsamelines:
-  - '(PAMS) yang berjumlah RM2 juta dan Jalan Penghubung Desa '
-  - 'berjumlah RM3.5juta; dan '
-  - '(4) Perbincangan bersama Kementerian Air, Tanah dan Sumber Asli (KATS) '
-  - 'bagi isu penstrukturan semula industri perkhidmatan air Negeri Selangor, '
-  - 'Wilayah Persekutuan Kuala Lumpur dan Putrajaya serta pelaksanaan '
-  - 'projek Loji Rawatan Air Langat 2.  '
-  - 'Sehubungan dengan itu, perbincangan yang berterusan serta kerjasama yang '
-  - terjalin di antara kedua-dua kerajaan dapat mempertingkatkan lagi usaha-
-  - 'usaha penambahbaikan infrastruktur dan kemudahan awam di Negeri Selangor '
-  - 'dari semasa ke semasa.   '
-  pdftxtsamestyles: []
-- pageno: 7
-  pdfplaintext: ""
-  pdftxtsamelines:
-  - 'INFO TAMBAHAN '
-  - 'Dalam memastikan jaringan jalan raya serta pengurusan trafik di Negeri Selangor '
-  - 'lebih terancang dalam mengatasi masalah kesesakan serta mengurangkan jumlah '
-  - 'kenderaan di jalan raya, pelan atau kajian induk telah dilaksanakan oleh Kerajaan '
-  - 'Negeri dan juga inisiatif Pihak Berkuasa Tempatan, manakala kajian trafik yang '
-  - 'disyaratkan oleh Jabatan dan Agensi Kerajaan seperti Jabatan Kerja Raya adalah '
-  - 'keperluan yang ditetapkan di dalam pelaksanaan projek-projek menaiktaraf jalan '
-  - 'raya.  '
-  - 'Antara kajian-kajian yang dilaksanakan (kajian dan pelan sedia ada) adalah seperti '
-  - 'di bawah: '
-  - 'BIL. Pelan / Kajian Yang '
-  - D
-  pdftxtsamestyles: []
-- pageno: 8
-  pdfplaintext: ""
-  pdftxtsamelines:
-  - 'BIL. Pelan / Kajian Yang '
-  - 'Dilaksanakan '
-  - 'Jabatan / Agensi / '
-  - 'PBT '
-  - 'Jumlah Peruntukan '
-  - '(RM) '
-  - 'projek dan termasuk '
-  - 'di dalam kos projek '
-  - 'yang dilaksanakan.  '
-  pdftxtsamestyles: []
-- pageno: 9
-  pdfplaintext: ""
-  pdftxtsamelines:
-  - 'PERTANYAAN-PERTANYAAN MULUT DARIPADA '
-  - 'Y.B. PUAN ELIZABETH WONG KEAT PING  '
-  - '(N37 BUKIT LANJAN) '
-  - 'TAJUK : PERUNTUKAN CERIA 2019 '
-  - '3.  Bertanya kepada Y.A.B. Dato'' Menteri Besar:- '
-  - 'a)     '
-  - 'Apakah jumlah peruntukan program CERIA membantu pembaikan apartmen '
-  - 'kos rendah kos rendah-sederhana untuk tahun 2019? '
-  - 'b)     '
-  - 'Berapa jumlah bantuan daripada Kerajaan Persekutuan yang disalurkan ke '
-  - 'Negeri Selangor untuk membantu pembaikan apartmen kos rendah, kos '
-  - r
-  pdftxtsamestyles: []
-- pageno: 10
-  pdfplaintext: ""
-  pdftxtsamelines:
-  - 'PERTANYAAN-PERTANYAAN MULUT DARIPADA '
-  - 'Y.B. PUAN LEE KEE HIONG  '
-  - '(N06 KUALA KUBU BAHARU) '
-  - 'TAJUK : PROGRAM HARI TANPA KENDERAAN '
-  - '4.  Bertanya kepada Y.A.B. Dato'' Menteri Besar:- '
-  - 'a)     '
-  - 'Nyatakan PBT yang menganjurkan program Hari Tanpa Kenderaan dan jumlah '
-  - 'kos yang dibelanjakan oleh pihak penganjur pada tahun 2018. '
-  - 'b)     '
-  - 'Nyatakan PBT yang telah dan akan menganjurkan program Hari Tanpa '
-  - 'Kenderaan pada tahun ini. '
-  pdftxtsamestyles: []
 - pageno: 11
   pdfplaintext: ""
   pdftxtsamelines:
@@ -163,7 +107,7 @@ pages:
 - pageno: 12
   pdfplaintext: ""
   pdftxtsamelines:
-  - 'PERTANYAAN-PERTANYAAN MULUT DARIPADA '
+  - 'Puan BERTANYA ADAKAH '
   - 'Y.B. PUAN JUWAIRIYA BINTI ZULKIFLI  '
   - '(N10 BUKIT MELAWATI) '
   - 'TAJUK : PROGRAM BLUE PRINT MEMBASMI KEMISKINAN '
@@ -171,6 +115,7 @@ pages:
   - 'a)     '
   - 'Berapakah jumlah penerima bantuan Blueprint bagi DUN Bukit Melawati; '
   - 'b)     '
+  - 'PERTANYAAN-PERTANYAAN MULUT DARIPADA '
   - 'Bagaimanakah prestasi dan kejayaan program Blueprint setakat ini dan '
   - 'bagaimanakah program ini dapat membantu membasmi kemiskinan. '
   - 'JAWAPAN: '
@@ -193,7 +138,7 @@ pages:
 - pageno: 14
   pdfplaintext: ""
   pdftxtsamelines:
-  - 'PERTANYAAN-PERTANYAAN MULUT DARIPADA '
+  - 'SALAH pertanyaan     MULUT DARIPADA '
   - 'Y.B. PUAN LIM YI WEI  '
   - '(N35 KAMPUNG TUNKU) '
   - 'TAJUK : USAHAWAN BELIA DAN WANITA '
@@ -221,65 +166,6 @@ pages:
   - 'Kerajaan Negeri akan menetapkan tema Usahawan Belia di salah satu daerah '
   - 'yang akan dikenalpasti kelak.  Antara Intipati program yang akan diadakan '
   - a
-  pdftxtsamestyles: []
-- pageno: 16
-  pdfplaintext: ""
-  pdftxtsamelines:
-  - 'PERTANYAAN-PERTANYAAN MULUT DARIPADA '
-  - 'Y.B. PUAN ROZANA BINTI ZAINAL ABIDIN  '
-  - '(N09 PERMATANG) '
-  - 'TAJUK : PASUKAN IKATAN DESA '
-  - '7.  Bertanya kepada Y.A.B. Dato'' Menteri Besar:- '
-  - 'a)     '
-  - 'Berapakah peruntukan yang akan disalurkan kepada Pasukan Ikatan Desa '
-  - 'pada tahun 2019? '
-  - 'b)     '
-  - 'Sekiranya ada, siapakah yang bertanggungjawab membelanjakan peruntukan '
-  - 'tersebut? '
-  pdftxtsamestyles: []
-- pageno: 17
-  pdfplaintext: ""
-  pdftxtsamelines:
-  - 'dikenalpasti kemudian. Ini bagi memastikan program yang dirancang dapat '
-  - 'memberikan impak maksimum dan hasil positif yang berterusan serta akan '
-  - 'memberikan manfaat kepada masyarakat kampung khusunya. '
-  - 'Dalam perancangan penambahbaikan terhadap program Ikatan Desa ini,  isu '
-  - 'berkaitan dengan kebajikan petugas keselamatan merupakan antara perkara '
-  - 'yang dititik beratkan dan akan diberi perhatian sewajarnya. Walau '
-  - 'bagaimanapun, bentuk insentif kebajikan yang akan diberikan kepada petugas '
-  - 'keselamatan Pasukan ikatan Desa ini masih belum diputuskan dan masih '
-  - 'diperingkat perbincangan.  '
-  pdftxtsamestyles: []
-- pageno: 18
-  pdfplaintext: ""
-  pdftxtsamelines:
-  - 'PERTANYAAN-PERTANYAAN MULUT DARIPADA '
-  - 'Y.B. PUAN MICHELLE NG MEI SZE  '
-  - '(N31 SUBANG JAYA) '
-  - 'TAJUK : PEMBUANGAN SISA KE DALAM LONGKANG '
-  - '8.  Bertanya kepada Y.A.B. Dato'' Menteri Besar:- '
-  - 'a)     '
-  - 'Apakah dasar Kerajaan Selangor untuk menyelesaikan masalah pembuangan '
-  - 'sisa oleh peniaga-peniaga (terutamanya peniaga restoran) ke dalam longkang? '
-  - 'JAWAPAN: '
-  - 'a) Bagi menyelesaikan masalah pembuangan sisa oleh peniaga-peniaga '
-  - '(terutama peniaga restoran) ke dalam longkang, setiap Pihak Berkuasa '
-  - T
-  pdftxtsamestyles: []
-- pageno: 19
-  pdfplaintext: ""
-  pdftxtsamelines:
-  - 'PERTANYAAN-PERTANYAAN MULUT DARIPADA '
-  - 'Y.B. TUAN AHMAD MUSTAIN BIN OTHMAN  '
-  - '(N02 SABAK) '
-  - 'TAJUK : MASALAH PERTANIAN '
-  - '9.  Bertanya kepada Y.A.B. Dato'' Menteri Besar:- '
-  - 'a)     '
-  - 'Mengapa hasil padi masih gagal melepasi sasaran yang ditetapkan oleh '
-  - 'jabatan? Adakah perlu tindakan kepada petani yang tidak mematuhi S.O.P '
-  - 'yang ditetapkan oleh jabatan? '
-  - 'b)     '
-  - 'Perlukah pentadbiran (PPK) yang gagal berfungsi untuk dirombak semula? '
   pdftxtsamestyles: []
 - pageno: 20
   pdfplaintext: ""
@@ -319,7 +205,7 @@ pages:
   - 'Y.B. PUAN WONG SIEW KI  '
   - '(N27 BALAKONG) '
   - 'TAJUK : PROGRAM JOM SHOPPING '
-  - '11.  Bertanya kepada Y.A.B. Dato'' Menteri Besar:- '
+  - '10.  Bertanya kepada Y.A.B. Dato'' Menteri Besar:- '
   - 'a)     '
   - 'Program Jom Shopping sukar dilaksanakan kerana syarat-syarat yang ketat '
   - 'dan cara perlaksanaan yang menyusahkan rakyat. Apakah pembaikan yang '
@@ -344,97 +230,10 @@ pages:
   - 'mewujudkan bantuan perayaan khusus kepada masyarakat Cina yang '
   - m
   pdftxtsamestyles: []
-- pageno: 24
-  pdfplaintext: ""
-  pdftxtsamelines:
-  - 'PERTANYAAN-PERTANYAAN MULUT DARIPADA '
-  - 'Y.B. TUAN HAJI SAARI BIN SUNGIB  '
-  - '(N18 HULU KELANG) '
-  - 'TAJUK : LANGKAH PEMELIHARAAN PERMATANG KUARZA GOMBAK '
-  - '12.  Bertanya kepada Y.A.B. Dato'' Menteri Besar:- '
-  - 'a)     '
-  - 'Apakah langkah-langkah semasa yang diambil oleh kerajaan bagi memelihara '
-  - 'kawasan Permatang Kuarza, Gombak dan melindungi persekitarannya '
-  - 'sementara proses pengiktirafan UNESCO diperolehi? '
-  - 'JAWAPAN: '
-  - 'a)    Tuan Speaker dan Ahli-Ahli Yang Berhormat, '
-  - P
-  pdftxtsamestyles: []
-- pageno: 25
-  pdfplaintext: ""
-  pdftxtsamelines:
-  - ' Mesyuarat Jawatankuasa Penyelarasan Laporan Draf Akhir Dossier PKGS '
-  - 'Teknikal bertarikh 12 Disember 2018 memutuskan tapak PKGS masih belum '
-  - 'bersedia untuk dicalonkan sebagai Tapak Warisan Dunia UNESCO.  '
-  - ' Walau bagaimanapun, Pasukan Perunding Pakar mendapati PKGS sangat '
-  - 'berpotensi sebagai salah satu komponen geosites dalam pembentukan '
-  - 'tapak geopark khususnya di Selangor. Tapak geopark ini akan dicadangkan '
-  - 'sebagai Tapak Geopark Kebangsaan terlebih dahulu sebelum diangkat sebagai '
-  - 'Tapak Geopark Global UNESCO (Pengiktirafan Geopark Global UNESCO '
-  - 'adalah kedua tertinggi selepas Tapak Warisan Dunia UNESCO).  '
-  - 'Untuk makluman Tuan Speaker dan Ahli-Ahli Yang Berhormat, '
-  - ' Majlis Tindakan Ekonomi Selangor (MTES) yang bersidang pada 21 '
-  - F
-  pdftxtsamestyles: []
-- pageno: 26
-  pdfplaintext: ""
-  pdftxtsamelines:
-  - 'PERTANYAAN-PERTANYAAN MULUT DARIPADA '
-  - 'Y.B. DATO'' MOHD IMRAN BIN TAMRIN  '
-  - '(N03 SUNGAI PANJANG) '
-  - 'TAJUK : INSTITUSI MAJLIS PENGURUSAN KOMUNITI KAMPUNG (MPKK) '
-  - '13.  Bertanya kepada Y.A.B. Dato'' Menteri Besar:- '
-  - 'a)     '
-  - 'Apakah peranan, tanggungjawab serta tugas khusus MPKK ? '
-  - 'b)     '
-  - 'Nyatakan jumlah Pengerusi MPKK yang telak dilantik dan yang masih belum '
-  - 'dilantik mengikut daerah? '
-  - 'JAWAPAN: '
-  - a
-  pdftxtsamestyles: []
-- pageno: 27
-  pdfplaintext: ""
-  pdftxtsamelines:
-  - '4. Biro Kesejahteraan dan Keceriaan '
-  - '5. Biro Pendidikan dan Inovasi '
-  - '6. Biro Pemantapan Spritual '
-  - '7. Biro Kebajikan dan Kesukarelawan '
-  - '8. Biro Infostruktur dan Komunikasi '
-  - '9. Biro Hal Ehwal Wanita dan Keluarga '
-  - 'MPKK juga berfungsi untuk merancang dan melaksanakan pelan pembangunan '
-  - 'kampung dengan penglibatan komuniti setempat menggunakan pendekatan '
-  - 'bottom-up approach ke arah mewujudkan kampung yang maju dan sejahtera. '
-  - 'Kesepakatan penduduk merupakan keperluan asas pembangunan negara dan '
-  - 'perlu digembleng melalui kepimpinan yang dinamik dan pentadbiran yang teratur. '
-  - M
-  pdftxtsamestyles: []
-- pageno: 28
-  pdfplaintext: ""
-  pdftxtsamelines:
-  - 'Hulu Selangor 33 0 '
-  - 'Sabak Bernam 72 7 '
-  - 'Jumlah 354 17 '
-  pdftxtsamestyles: []
-- pageno: 29
-  pdfplaintext: ""
-  pdftxtsamelines:
-  - 'PERTANYAAN-PERTANYAAN MULUT DARIPADA '
-  - 'Y.B. TUAN BORHAN BIN AMAN SHAH  '
-  - '(N54 TANJUNG SEPAT) '
-  - 'TAJUK : KAWALAN HAKISAN DI PANTAI JENGKOK, SUNGAI PELEK, SEPANG '
-  - '14.  Bertanya kepada Y.A.B. Dato'' Menteri Besar:- '
-  - 'a)     '
-  - 'Apakah tindakan Kerajaan Negeri bagi mengawal hakisan yang berlaku di '
-  - 'Pantai Jengkok, Sungai Pelek yang mengakibatkan kerosakan harta benda '
-  - 'kepada masyarakat Orang Asli di kawasan tersebut? '
-  - 'JAWAPAN: '
-  - 'a) Untuk makluman, JPS Negeri Selangor telah mengemukakan permohonan di '
-  - b
-  pdftxtsamestyles: []
 - pageno: 30
   pdfplaintext: ""
   pdftxtsamelines:
-  - 'PERTANYAAN-PERTANYAAN MULUT DARIPADA '
+  - 'MULUT DARIPADA PERTANYAAN  '
   - 'Y.B. TUAN EDRY FAIZAL BIN EDDY YUSOF  '
   - '(N23 DUSUN TUA) '
   - 'TAJUK : PERUNTUKAN MASJID '
@@ -451,25 +250,9 @@ pages:
   pdfplaintext: ""
   pdftxtsamelines: []
   pdftxtsamestyles: []
-- pageno: 32
-  pdfplaintext: ""
-  pdftxtsamelines:
-  - 'PERTANYAAN-PERTANYAAN MULUT DARIPADA '
-  - 'Y.B. TUAN HASNUL BIN BAHARUDDIN  '
-  - '(N53 MORIB) '
-  - 'TAJUK : BANTUAN SIHAT SELANGOR '
-  - '16.  Bertanya kepada Y.A.B. Dato'' Menteri Besar:- '
-  - 'a)     '
-  - 'Kelulusan bantuan sihat Selangor mengambil tempoh masa yang lama '
-  - 'sehingga 3 ke 4 bulan. keperluan kepada pemohon amatlah diperlukan segera. '
-  - 'b)     '
-  - 'Apakah langkah yang di ambil oleh pihak kerajaan untuk mempercepatkan '
-  - 'proses kelulusan tersebut? '
-  pdftxtsamestyles: []
 - pageno: 33
   pdfplaintext: ""
   pdftxtsamelines:
-  - 'PERTANYAAN-PERTANYAAN MULUT DARIPADA '
   - 'Y.B. DATO'' MOHD SHAMSUDIN BIN LIAS  '
   - '(N08 SUNGAI BURONG) '
   - 'TAJUK : PENGENDALI WIFI SELANGORKU  '
@@ -500,7 +283,6 @@ pages:
 - pageno: 35
   pdfplaintext: ""
   pdftxtsamelines:
-  - 'PERTANYAAN-PERTANYAAN MULUT DARIPADA '
   - 'Y.B. TUAN HARUMAINI BIN HAJI OMAR  '
   - '(N07 BATANG KALI) '
   - 'TAJUK : PELABURAN ASING '

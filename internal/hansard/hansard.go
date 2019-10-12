@@ -27,6 +27,14 @@ type HansardDocument struct {
 	HansardQuestions     []HansardQuestion
 }
 
+type ErrorQuestionsHasInvalid struct {
+	badQuestionsCount int
+}
+
+func (e ErrorQuestionsHasInvalid) Error() string {
+	return fmt.Sprintf("Has %d bad Questions!", e.badQuestionsCount)
+}
+
 func NewHansardDocument(sessionName string, pdfPath string) (*HansardDocument, error) {
 	// Load the PDFDoc; should we check length?
 	pdfDoc, err := NewPDFDocument(pdfPath, nil)
@@ -139,19 +147,25 @@ func NewHansardQuestions(pdfDoc *PDFDocument, hansardQuestions *[]HansardQuestio
 		return fmt.Errorf("pdfDoc is nil!")
 	}
 	var hansardQuestion *HansardQuestion
+	var badQuestionsCount int
 	// Iterate through all pages
 	for _, r := range pdfDoc.Pages {
 		if isStartOfQuestionSection(r) {
 			// Special case: first round ..
 			if hansardQuestion != nil {
+				// Before  append; let's check previous and flag if got bad  question
+				if hansardQuestion.QuestionNum == "0" {
+					badQuestionsCount++
+				}
+				//  Otherwise, attach as per needed ..
 				*hansardQuestions = append(*hansardQuestions, *hansardQuestion)
 			}
 			// Init a new hansardQuestion struct
-			hansardQuestion = &HansardQuestion{PageNumStart: r.PageNo}
+			hansardQuestion = &HansardQuestion{QuestionNum: "0", PageNumStart: r.PageNo}
 			for _, rowContent := range r.PDFTxtSameLines {
 				foundQuestionNum, exerr := extractQuestionNum(rowContent)
 				// DEBUG ..
-				fmt.Println(fmt.Sprintf("FOUND Question %s in page %d", foundQuestionNum, r.PageNo))
+				//fmt.Println(fmt.Sprintf("FOUND Question %s in page %d", foundQuestionNum, r.PageNo))
 				if exerr != nil {
 					return exerr
 				}
@@ -162,12 +176,25 @@ func NewHansardQuestions(pdfDoc *PDFDocument, hansardQuestions *[]HansardQuestio
 				}
 			}
 		}
-		// Update end page num as we go along ..
-		hansardQuestion.PageNumEnd = r.PageNo
+		// Put some protection checks ..
+		if hansardQuestion != nil {
+			// Update end page num as we go along ..
+			hansardQuestion.PageNumEnd = r.PageNo
+		}
 	}
-	// Special case: first round ..
+	// Special case: last line; code below probably can be refactored!
 	if hansardQuestion != nil {
+		// Before  append; let's check previous and flag if got bad  question
+		if hansardQuestion.QuestionNum == "0" {
+			badQuestionsCount++
+		}
+		//  Otherwise, attach as per needed ..
 		*hansardQuestions = append(*hansardQuestions, *hansardQuestion)
 	}
+	// If have badQuestionsCount; flag it; NOT fatal; but to be handled by caller
+	if badQuestionsCount > 0 {
+		return fmt.Errorf("NewHansardQuestions FAIL: %w", ErrorQuestionsHasInvalid{badQuestionsCount})
+	}
+	// Reached here; all OK and peachy!
 	return nil
 }

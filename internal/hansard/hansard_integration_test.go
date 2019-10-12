@@ -1,7 +1,9 @@
 package hansard_test
 
 import (
+	"errors"
 	"flag"
+	"fmt"
 	"io/ioutil"
 	"os"
 	"path/filepath"
@@ -28,19 +30,68 @@ func TestNewHansardQuestions(t *testing.T) {
 		args    args
 		wantErr bool
 	}{
-		{"case #1", args{"HDOC-Lisan-1-20", "raw/Lisan/SOALAN MULUT (1-20).pdf", &[]hansard.HansardQuestion{{"1", 1, 4}, {"2", 5, 5}}}, false},
-		//{"case #2", args{"HDOC-Lisan-1-20", "raw/Lisan/SOALAN MULUT (1-20).pdf", nil}, false},
-		{"case #3", args{"HDOC-BukanLisan-1-20", "raw/BukanLisan/1 - 20.pdf", &[]hansard.HansardQuestion{{"1", 1, 1}, {"2", 2, 2}, {"3", 3, 5}}}, false},
-		//{"case #4", args{"HDOC-BukanLisan-1-20", "raw/BukanLisan/1 - 20.pdf", nil}, false},
-		{"sad #1", args{"Bad-HDOC-Lisan-1-20", "raw/Lisan/SOALAN MULUT (1-20).pdfa", nil}, true},
-		{"sad #2", args{"Bad-HDOC-BukanLisan-1-20", "raw/BukanLisan/1 - 20b.pdf", nil}, true},
+		{"case #1", args{
+			"HDOC-Lisan-1-20", "raw/Lisan/SOALAN MULUT (1-20).pdf",
+			&[]hansard.HansardQuestion{
+				{"1", 1, 4},
+				{"2", 5, 5},
+			},
+		}, false},
+		{"case #3", args{
+			"HDOC-BukanLisan-1-20", "raw/BukanLisan/1 - 20.pdf",
+			&[]hansard.HansardQuestion{
+				{"1", 1, 1},
+				{"2", 2, 2},
+				{"3", 3, 5},
+			},
+		}, false},
+		{"sad #1", args{
+			"Bad-HDOC-Lisan-1-20", "raw/Lisan/SOALAN MULUT (1-20).pdfa",
+			&[]hansard.HansardQuestion{
+				{"8", 18, 18}, // This simulates scanned pages messed up ordering
+				{"9", 19, 11}, // This is to simulate messing the ordering in PDFs
+				{"5", 12, 13},
+				{"6", 14, 15},
+				{"10", 20, 21},
+				{"10", 22, 23},
+				{"15", 30, 36},
+				{"19", 37, 37},
+				{"0", 38, 39},
+			},
+		}, true},
+		// We expect QuestionNum of "0" for pages with some marker but could NOT recognize question number!
+		{"sad #2", args{
+			"Bad-HDOC-BukanLisan-1-20", "raw/BukanLisan/1 - 20b.pdf",
+			&[]hansard.HansardQuestion{
+				{"0", 11, 12},
+				{"0", 29, 30},
+				{"0", 32, 33},
+			},
+		}, true,
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			pdfDoc := samplePDFFromFixture(t, tt.args.fixtureLabel, tt.args.pdfPath)
 			hansardQuestions := make([]hansard.HansardQuestion, 0, 20)
-			if err := hansard.NewHansardQuestions(pdfDoc, &hansardQuestions); (err != nil) != tt.wantErr {
+			err := hansard.NewHansardQuestions(pdfDoc, &hansardQuestions)
+			if (err != nil) != tt.wantErr {
 				t.Errorf("NewHansardQuestions() error = %v, wantErr %v", err, tt.wantErr)
+			}
+			//  For errors; check out Error Type to see if it is  recoverable
+			if err != nil {
+				// Below does not work; apparently is not expression -> hansard.ErrorQuestionsHasInvalid. Why?
+				//if errors.Is(err, hansard.ErrorQuestionsHasInvalid) {
+				//	t.Errorf("ERR: %v", err)
+				//}
+				errQInvalid, ok := errors.Unwrap(err).(hansard.ErrorQuestionsHasInvalid)
+				if ok {
+					fmt.Println("RECOVERABLE: ", errQInvalid.Error())
+				} else {
+					// Is more serious error?
+				}
+				//  DEBUG
+				//spew.Dump(errors.Unwrap(err))
 			}
 
 			// Show diff if any ..
