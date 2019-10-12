@@ -31,7 +31,7 @@ type ErrorQuestionsHasInvalid struct {
 	badQuestionsCount int
 }
 
-func (e ErrorQuestionsHasInvalid) Error() string {
+func (e *ErrorQuestionsHasInvalid) Error() string {
 	return fmt.Sprintf("Has %d bad Questions!", e.badQuestionsCount)
 }
 
@@ -193,7 +193,7 @@ func NewHansardQuestions(pdfDoc *PDFDocument, hansardQuestions *[]HansardQuestio
 	}
 	// If have badQuestionsCount; flag it; NOT fatal; but to be handled by caller
 	if badQuestionsCount > 0 {
-		return fmt.Errorf("NewHansardQuestions FAIL: %w", ErrorQuestionsHasInvalid{badQuestionsCount})
+		return fmt.Errorf("NewHansardQuestions FAIL: %w", &ErrorQuestionsHasInvalid{badQuestionsCount})
 	}
 	// Reached here; all OK and peachy!
 	return nil

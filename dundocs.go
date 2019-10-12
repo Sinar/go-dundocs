@@ -1,6 +1,10 @@
 package dundocs
 
-import "github.com/Sinar/go-dundocs/internal/hansard"
+import (
+	"log"
+
+	"github.com/Sinar/go-dundocs/internal/hansard"
+)
 
 type DUNDocs struct {
 	Conf Configuration
@@ -32,4 +36,21 @@ type Configuration struct {
 
 	// Command being executed.
 	Cmd CommandMode
+}
+
+func (dd *DUNDocs) Plan() {
+	log.Println("In Plan ..")
+	//pdfPath := dd.Conf.SourcePDFPath
+}
+
+func (dd *DUNDocs) Split() {
+	log.Println("In Split ..")
+	// Load plan
+}
+
+func (dd *DUNDocs) Reset() {
+	log.Println("In Reset ...")
+	// Clean up plan
+	// Clean up split pages folder
+	// Clean up merged pages location
 }

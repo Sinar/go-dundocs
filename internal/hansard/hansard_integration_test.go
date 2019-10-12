@@ -74,24 +74,36 @@ func TestNewHansardQuestions(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			pdfDoc := samplePDFFromFixture(t, tt.args.fixtureLabel, tt.args.pdfPath)
 			hansardQuestions := make([]hansard.HansardQuestion, 0, 20)
+			// Run function  ..
 			err := hansard.NewHansardQuestions(pdfDoc, &hansardQuestions)
+			// Check if expectation is fulfilled
 			if (err != nil) != tt.wantErr {
 				t.Errorf("NewHansardQuestions() error = %v, wantErr %v", err, tt.wantErr)
 			}
 			//  For errors; check out Error Type to see if it is  recoverable
 			if err != nil {
+				//  Old way is
+				// if err == hansard.ErrorQuestionsHasInvalid ..
 				// Below does not work; apparently is not expression -> hansard.ErrorQuestionsHasInvalid. Why?
 				//if errors.Is(err, hansard.ErrorQuestionsHasInvalid) {
 				//	t.Errorf("ERR: %v", err)
 				//}
-				errQInvalid, ok := errors.Unwrap(err).(hansard.ErrorQuestionsHasInvalid)
+				// Below would be the old way to unwrap the embedded error and check the type
+				errQInvalid, ok := errors.Unwrap(err).(*hansard.ErrorQuestionsHasInvalid)
 				if ok {
-					fmt.Println("RECOVERABLE: ", errQInvalid.Error())
+					fmt.Println("RECOVERABLE_OLD: ", errQInvalid.Error())
 				} else {
 					// Is more serious error?
 				}
-				//  DEBUG
-				//spew.Dump(errors.Unwrap(err))
+				// Below is the equivalent of above;  but better as it unwraps all and try to match ..
+				var invalidQError *hansard.ErrorQuestionsHasInvalid
+				if errors.As(err, &invalidQError) {
+					fmt.Println("RECOVERABLE_NEW: ", invalidQError.Error())
+				} else {
+					// Is more serioous error; cannot be recovered!
+					panic(err)
+					//fmt.Println(err)
+				}
 			}
 
 			// Show diff if any ..
