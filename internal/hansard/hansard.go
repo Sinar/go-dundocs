@@ -109,7 +109,9 @@ func NewHansardDocumentContent(pdfDoc *PDFDocument, hansardDoc *HansardDocument)
 
 func isStartOfQuestionSection(currentPage PDFPage) bool {
 
-	// Look out for pertanyaan pattern
+	// Look out for pertanyaan pattern .. is duplicated
+	// TODO: Should sync it up somehow; having it embedded so deep here might
+	// not be too good ..
 	hansardType, err := detectHansardType(currentPage)
 	if err != nil {
 		panic(err)

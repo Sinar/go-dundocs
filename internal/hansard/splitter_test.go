@@ -103,6 +103,7 @@ func Test_normalizeToAbsolutePath(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
+			// Prepare TemoDir working ..
 			gotAbsolutePath, gotBaseName, gotExtension := normalizeToAbsolutePath(tt.args.relativePath)
 			if gotAbsolutePath != tt.wantAbsolutePath {
 				t.Errorf("normalizeToAbsolutePath() gotAbsolutePath = %v, want %v", gotAbsolutePath, tt.wantAbsolutePath)
