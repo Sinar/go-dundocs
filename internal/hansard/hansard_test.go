@@ -78,8 +78,8 @@ func Test_detectHansardType(t *testing.T) {
 	}{
 		{"happy #1", args{PDFPage{PDFTxtSameLines: []string{"PERTANYAAN-PERTANYAAN MULUT DARIPADA ", "Y.B. PUAN LEE KEE HIONG ", "(N06 KUALA KUBU BAHARU) ", "TAJUK : PROGRAM HARI TANPA KENDERAAN ", "4.  Bertanya kepada Y.A.B. Dato'' Menteri Besar:- ", "a)   "}}}, HANSARD_SPOKEN},
 		{"happy #2", args{PDFPage{PDFTxtSameLines: []string{"PERTANYAAN-PERTANYAAN BERTULIS DARIPADA ", "(N43 SEMENTA) ", "TAJUK : BANTUAN SKIM CERIA", "'2.   Bertanya kepada Y.A.B. Dato'' Menteri Besar:- "}}}, HANSARD_WRITTEN},
-		{"not quite #1", args{PDFPage{PDFTxtSameLines: []string{"YAB Yeo", "PerTANYAAN mengenai Sampah yang dibuang"}}}, -1},
-		{"sad #1", args{PDFPage{PDFTxtSameLines: []string{"Jumlah Kutipan Royalti (RM) ", "2017 80,127,921.02 Juta 125,757.12 ", "Di Bawah Tanah Kerajaan dan Tanah Hakmilik  "}}}, -1},
+		{"not quite #1", args{PDFPage{PDFTxtSameLines: []string{"YAB Yeo", "PerTANYAAN mengenai Sampah yang dibuang"}}}, HANSARD_INVALID},
+		{"sad #1", args{PDFPage{PDFTxtSameLines: []string{"Jumlah Kutipan Royalti (RM) ", "2017 80,127,921.02 Juta 125,757.12 ", "Di Bawah Tanah Kerajaan dan Tanah Hakmilik  "}}}, HANSARD_INVALID},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {

@@ -90,10 +90,14 @@ func NewHansardDocumentContent(pdfDoc *PDFDocument, hansardDoc *HansardDocument)
 		return fmt.Errorf("Needs at least one page for valid Hansard!!! Found: %d", len(pdfDoc.Pages))
 	}
 	// Detect HansardType from the first page ... and fill it up ..
+	// DEBUG
+	//spew.Dump(pdfDoc.Pages[0])
 	hansardType, derr := detectHansardType(pdfDoc.Pages[0])
 	if derr != nil {
 		return derr
 	}
+	// DEBUG
+	//fmt.Println("TYPE: ", hansardType)
 	hansardDoc.HansardType = hansardType
 	// Extract out Questions metadata for all pages ..
 	hansardQuestions := make([]HansardQuestion, 0, 20)
@@ -103,6 +107,8 @@ func NewHansardDocumentContent(pdfDoc *PDFDocument, hansardDoc *HansardDocument)
 	}
 	// Fill up the questions ...
 	hansardDoc.HansardQuestions = hansardQuestions
+	// DEBUG
+	//spew.Dump(hansardDoc)
 	// All OK?
 	return nil
 }

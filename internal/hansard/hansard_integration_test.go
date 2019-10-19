@@ -123,11 +123,61 @@ func TestNewHansardDocument(t *testing.T) {
 	tests := []struct {
 		name    string
 		args    args
-		want    *hansard.HansardDocument
+		want    hansard.HansardDocument
 		wantErr bool
 	}{
-		{"happy #1", args{"HDOC-Lisan-1-20", "raw/Lisan/SOALAN MULUT (1-20).pdf"}, nil, false},
-		{"happy #2", args{"HDOC-BukanLisan-1-20", "raw/BukanLisan/1 - 20.pdf"}, nil, false},
+		{"happy #1", args{"HDOC-Lisan-1-20", "raw/Lisan/SOALAN MULUT (1-20).pdf"}, hansard.HansardDocument{
+			StateAssemblySession: "testSessionName",
+			HansardType:          hansard.HANSARD_SPOKEN,
+			HansardQuestions: []hansard.HansardQuestion{
+				{"1", 1, 4},
+				{"2", 5, 8},
+				{"3", 9, 9},
+				{"4", 10, 11},
+				{"5", 12, 13},
+				{"6", 14, 15},
+				{"7", 16, 17},
+				{"8", 18, 18},
+				{"9", 19, 19},
+				{"10", 20, 21},
+				{"11", 22, 23},
+				{"12", 24, 25},
+				{"13", 26, 28},
+				{"14", 29, 29},
+				{"15", 30, 31},
+				{"16", 32, 32},
+				{"17", 33, 34},
+				{"18", 35, 36},
+				{"19", 37, 37},
+				{"20", 38, 39},
+			},
+		}, false},
+		{"happy #2", args{"HDOC-BukanLisan-1-20", "raw/BukanLisan/1 - 20.pdf"}, hansard.HansardDocument{
+			StateAssemblySession: "testSessionName",
+			HansardType:          hansard.HANSARD_WRITTEN,
+			HansardQuestions: []hansard.HansardQuestion{
+				{"1", 1, 1},
+				{"2", 2, 2},
+				{"3", 3, 5},
+				{"4", 6, 6},
+				{"5", 7, 7},
+				{"6", 8, 9},
+				{"7", 10, 10},
+				{"8", 11, 17},
+				{"9", 18, 18},
+				{"10", 19, 19},
+				{"11", 20, 20},
+				{"12", 21, 21},
+				{"13", 22, 24},
+				{"14", 25, 26},
+				{"15", 27, 28},
+				{"16", 29, 30},
+				{"17", 31, 31},
+				{"18", 32, 34},
+				{"19", 35, 36},
+				{"20", 37, 37},
+			},
+		}, false},
 		//{"happy #1", args{"", ""}, nil, false},
 		//{"happy #1", args{"", ""}, nil, false},
 		//{"happy #1", args{"", ""}, nil, false},
@@ -135,16 +185,24 @@ func TestNewHansardDocument(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			hansardDocument := hansard.HansardDocument{StateAssemblySession: "testSessionName"}
+			// Load Fixture for test
 			pdfDoc := loadPDFFromFixture(t, tt.args.fixtureLabel, tt.args.pdfPath)
-			got := hansard.NewHansardDocumentContent(pdfDoc, &hansardDocument)
-			//got, err := hansard.NewHansardDocument("sessionName", tt.args.pdfPath)
-			//if (err != nil) != tt.wantErr {
-			//	t.Errorf("NewHansardDocument() error = %v, wantErr %v", err, tt.wantErr)
-			//	return
-			//}
+			// DEBUG
+			//spew.Dump(pdfDoc)
+			got := hansard.HansardDocument{StateAssemblySession: "testSessionName"}
+			err := hansard.NewHansardDocumentContent(pdfDoc, &got)
+			// DEBUG
+			//spew.Dump(got)
+			// Catch bad pdf raw data .. no cases yet ..
+			if (err != nil) != tt.wantErr {
+				t.Errorf("NewHansardDocument() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
 			if diff := cmp.Diff(tt.want, got); diff != "" {
 				t.Errorf("NewHansardDocumentContent() mismatch (-want +got):\n%s", diff)
+				// DEBUG diff using alternative method
+				//litter.Dump(tt.want)
+				//litter.Dump(got)
 			}
 
 			//if !reflect.DeepEqual(got, tt.want) {

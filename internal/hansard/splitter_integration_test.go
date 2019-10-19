@@ -146,9 +146,18 @@ func TestSplitHansardDocumentPlan_ExecuteSplit(t *testing.T) {
 		fields  fields
 		wantErr bool
 	}{
-		{"no plan #1", fields{"", nil}, true},
-		{"happy #1", fields{"", nil}, false},
-		{"happy #2", fields{"", nil}, false},
+		{"no plan #1", fields{"", hansard.HansardDocument{
+			StateAssemblySession: "",
+		}}, true},
+		{"happy #1", fields{"", hansard.HansardDocument{
+			StateAssemblySession: "",
+			HansardType:          0,
+			HansardQuestions:     nil,
+		}}, false},
+		{"happy #2", fields{"", hansard.HansardDocument{
+			HansardType:      0,
+			HansardQuestions: nil,
+		}}, false},
 	}
 	// Prepare the PDF test cases we will use in the tests ..
 	// Same as used in  hansard_integration_tests; we will run them  here to set it up
