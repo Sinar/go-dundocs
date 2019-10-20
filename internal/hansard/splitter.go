@@ -1,9 +1,5 @@
 package hansard
 
-import (
-	"github.com/davecgh/go-spew/spew"
-)
-
 // Configuration of a Context from outside-in ..
 type Configuration struct {
 	// DUN Session Label
@@ -51,7 +47,7 @@ func NewSplitHansardDocumentPlan(conf Configuration) *SplitHansardDocumentPlan {
 		panic(err)
 	}
 	// DEBUG
-	spew.Dump(splitPlan)
+	//spew.Dump(splitPlan)
 	return &splitPlan
 }
 

@@ -1,0 +1,12 @@
+stateassemblysession: confDUNSession
+hansardtype: 2
+hansardquestions:
+- questionnum: "1"
+  pagenumstart: 1
+  pagenumend: 1
+- questionnum: "2"
+  pagenumstart: 2
+  pagenumend: 2
+- questionnum: "3"
+  pagenumstart: 3
+  pagenumend: 5

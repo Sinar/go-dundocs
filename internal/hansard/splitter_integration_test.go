@@ -9,6 +9,8 @@ import (
 	"path/filepath"
 	"testing"
 
+	"github.com/google/go-cmp/cmp/cmpopts"
+
 	"github.com/google/go-cmp/cmp"
 
 	"gopkg.in/yaml.v2"
@@ -55,6 +57,7 @@ func TestNewSplitHansardDocumentPlan(t *testing.T) {
 			pdfDoc := samplePDFFromFixture(t, tt.args.fixtureLabel, "")
 			//  TODO: derive filename from tt.args.pdfSourcePath
 			// Init
+			// TODO: Should probably refactor into  an init function; and put more into method ..
 			var planDir string
 			if tt.args.planDir == "" {
 				planDir = dir + "/data"
@@ -64,11 +67,9 @@ func TestNewSplitHansardDocumentPlan(t *testing.T) {
 				PlanDir: planDir,
 				HansardDocument: hansard.HansardDocument{
 					StateAssemblySession: confDUNSession,
+					HansardQuestions:     []hansard.HansardQuestion{},
 				},
 			}
-			// Save the PLan for use by LoadPLan
-			goldenLabel := "plan-sample-" + tt.args.fixtureLabel
-			loadPlanFromGolden(t, goldenLabel, &got.HansardDocument)
 			// QUESTION: What to do if failed load??
 			// Sav eplan  fixture here? or just check structure
 			//if got := hansard.NewSplitHansardDocumentPlanContent(pdfDoc, &splitPlan); !reflect.DeepEqual(got, tt.want) {
@@ -79,7 +80,27 @@ func TestNewSplitHansardDocumentPlan(t *testing.T) {
 				t.Errorf("NewSplitHansardDocumentPlanContent() error = %v, wantErr %v", serr, tt.wantErr)
 				return
 			}
-			if diff := cmp.Diff(tt.want, got); diff != "" {
+			// want load from goldenImage
+			// Save the PLan for use by LoadPLan
+			goldenLabel := "plan-sample-" + tt.args.fixtureLabel
+			want := hansard.SplitHansardDocumentPlan{
+				PlanDir: planDir,
+				HansardDocument: hansard.HansardDocument{
+					StateAssemblySession: confDUNSession,
+					HansardQuestions:     []hansard.HansardQuestion{},
+				},
+			}
+			if *updateSplitterGolden {
+				loadPlanFromGolden(t, goldenLabel, &got.HansardDocument)
+				want.HansardDocument = got.HansardDocument
+			} else {
+				// load from cache ..
+				var wantHansardDocument hansard.HansardDocument
+				loadPlanFromGolden(t, goldenLabel, &wantHansardDocument)
+				want.HansardDocument = wantHansardDocument
+			}
+			// Finish updating want .. need to ignore unexprted ..
+			if diff := cmp.Diff(want, got, cmpopts.IgnoreUnexported(hansard.SplitHansardDocumentPlan{})); diff != "" {
 				t.Errorf("NewSplitHansardDocumentPlanContent() mismatch (-want +got):\n%s", diff)
 				// DEBUG diff using alternative method
 				//litter.Dump(tt.want)
