@@ -7,7 +7,6 @@ import (
 	"log"
 	"os"
 	"path/filepath"
-	"reflect"
 	"testing"
 
 	"github.com/google/go-cmp/cmp"
@@ -22,17 +21,74 @@ var updateSplitterGolden = flag.Bool("updateSplitterGolden", false, "update Spli
 //var updateSplitterFixture = flag.Bool("updateSplitterFixture", false, "update SplitHansardDocPlan .fixture plans")
 
 func TestNewSplitHansardDocumentPlan(t *testing.T) {
+	type args struct {
+		fixtureLabel  string
+		pdfSourcePath string
+		planDir       string
+	}
 	tests := []struct {
-		name string
-		want *hansard.SplitHansardDocumentPlan
+		name    string
+		args    args
+		want    *hansard.SplitHansardDocumentPlan
+		wantErr bool
 	}{
-		// TODO: Add test cases.
+		{"happy #1", args{"HDOC-Lisan-1-20", "testdata/a.yml", "testdata/split-case-1.yaml"}, nil, false},
+		{"happy #2", args{"HDOC-BukanLisan-1-20", "testdata/a.yml", "testdata/split-case-2.yaml"}, nil, false},
+		{"sad #1", args{"Bad-HDOC-Lisan-1-20", "testdata/a.yml", "testdata/split-case-3.yaml"}, nil, true},
+		{"sad #2", args{"Bad-HDOC-BukanLisan-1-20", "testdata/a.yml", "testdata/split-case-4.yaml"}, nil, true},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := hansard.NewSplitHansardDocumentPlan(); !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("NewSplitHansardDocumentPlan() = %v, want %v", got, tt.want)
+			// Prep temp dir for usage ..
+			// Prepare TempDir for working with it
+			dir, err := ioutil.TempDir("", "dundocs-splitter")
+			if err != nil {
+				log.Fatal(err)
 			}
+			// Comment out below if need to see the output in dir
+			defer os.RemoveAll(dir)
+			log.Println("Dir is ", dir)
+			// Load sample PDFs and check against the plan passed in
+			// use the sample version so test cases not too long .. WILL be loaded from testdata fixture
+			// Prefix with  plan-sample as it is a PLAN made from SAMPLE of the Fixture in testdata already
+			// should FAIL if not found!
+			pdfDoc := samplePDFFromFixture(t, tt.args.fixtureLabel, "")
+			//  TODO: derive filename from tt.args.pdfSourcePath
+			// Init
+			var planDir string
+			if tt.args.planDir == "" {
+				planDir = dir + "/data"
+			}
+			confDUNSession := "confDUNSession"
+			got := hansard.SplitHansardDocumentPlan{
+				PlanDir: planDir,
+				HansardDocument: hansard.HansardDocument{
+					StateAssemblySession: confDUNSession,
+				},
+			}
+			// Save the PLan for use by LoadPLan
+			goldenLabel := "plan-sample-" + tt.args.fixtureLabel
+			loadPlanFromGolden(t, goldenLabel, &got.HansardDocument)
+			// QUESTION: What to do if failed load??
+			// Sav eplan  fixture here? or just check structure
+			//if got := hansard.NewSplitHansardDocumentPlanContent(pdfDoc, &splitPlan); !reflect.DeepEqual(got, tt.want) {
+			//	t.Errorf("NewSplitHansardDocumentPlan() = %v, want %v", got, tt.want)
+			//}
+			serr := hansard.NewSplitHansardDocumentPlanContent(pdfDoc, &got)
+			if (serr != nil) != tt.wantErr {
+				t.Errorf("NewSplitHansardDocumentPlanContent() error = %v, wantErr %v", serr, tt.wantErr)
+				return
+			}
+			if diff := cmp.Diff(tt.want, got); diff != "" {
+				t.Errorf("NewSplitHansardDocumentPlanContent() mismatch (-want +got):\n%s", diff)
+				// DEBUG diff using alternative method
+				//litter.Dump(tt.want)
+				//litter.Dump(got)
+			}
+
+			// Check it is actually saved in right location .. :P; if plandir was nto passed in  ..
+			// See if filename is correct
+			// Check ocntent in load? against the fixture?
 		})
 	}
 }
@@ -60,8 +116,7 @@ func TestSplitHansardDocumentPlan_SavePlan(t *testing.T) {
 			log.Println("Dir is ", dir)
 
 			s := &hansard.SplitHansardDocumentPlan{
-				WorkingDir: dir,
-				PlanDir:    dir,
+				PlanDir: dir,
 			}
 			// Check against golden file for it ??
 			// We pass "" for pdfPath as it will load from testdata; failing it should FAIL LOUDLY
@@ -177,7 +232,6 @@ func TestSplitHansardDocumentPlan_ExecuteSplit(t *testing.T) {
 			log.Println("Dir is ", dir)
 
 			s := &hansard.SplitHansardDocumentPlan{
-				WorkingDir:      dir,
 				PlanDir:         tt.fields.planDir,
 				HansardDocument: tt.fields.hansardDocument,
 			}

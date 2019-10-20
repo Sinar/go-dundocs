@@ -1,15 +1,66 @@
 package hansard
 
+import (
+	"github.com/davecgh/go-spew/spew"
+)
+
+// Configuration of a Context from outside-in ..
+type Configuration struct {
+	// DUN Session Label
+	DUNSession string
+
+	// ./raw + ./data folders are assumed to be relative to this dir
+	WorkingDir string
+
+	// Source PDF can be anywhere; maybe make it a Reader to be read direct from S3?
+	SourcePDFPath string
+
+	// Options?
+	Options *ExtractPDFOptions
+}
+
 type SplitHansardDocumentPlan struct {
-	WorkingDir      string
+	workingDir      string
 	PlanDir         string
 	HansardDocument HansardDocument
 }
 
-func NewSplitHansardDocumentPlan() *SplitHansardDocumentPlan {
-	splitPlan := SplitHansardDocumentPlan{}
-
+func NewSplitHansardDocumentPlan(conf Configuration) *SplitHansardDocumentPlan {
+	// If we need to customize any options; put  it above ..
+	// Get PDF content
+	pdfDoc, nperr := NewPDFDocument(conf.SourcePDFPath, conf.Options)
+	if nperr != nil {
+		panic(nperr)
+	}
+	// Once have the  content  to be  processed; pass it all on after using the config  to adjust things ..
+	// If no PLanDir; do a default
+	planDir := conf.WorkingDir + "/data"
+	// TODO: Make the  workingDir into absolute  before  instantiate
+	// It will later need to  be append with Type (string version) + filename .. + split.yml
+	// TODO: Filename needs to be  extracted out; and need to handle those cases with '.' in filename
+	splitPlan := SplitHansardDocumentPlan{
+		workingDir: conf.WorkingDir,
+		PlanDir:    planDir,
+		HansardDocument: HansardDocument{
+			StateAssemblySession: conf.DUNSession,
+		},
+	}
+	// Fill in the needed  plan
+	err := NewSplitHansardDocumentPlanContent(pdfDoc, &splitPlan)
+	if err != nil {
+		panic(err)
+	}
+	// DEBUG
+	spew.Dump(splitPlan)
 	return &splitPlan
+}
+
+func NewSplitHansardDocumentPlanContent(pdfDoc *PDFDocument, splitPlan *SplitHansardDocumentPlan) error {
+	err := NewHansardDocumentContent(pdfDoc, &splitPlan.HansardDocument)
+	if err != nil {
+		return err
+	}
+	return nil
 }
 
 func (s *SplitHansardDocumentPlan) SavePlan() error {
