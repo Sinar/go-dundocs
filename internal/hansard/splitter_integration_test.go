@@ -9,6 +9,8 @@ import (
 	"path/filepath"
 	"testing"
 
+	"github.com/sanity-io/litter"
+
 	"github.com/google/go-cmp/cmp/cmpopts"
 
 	"github.com/google/go-cmp/cmp"
@@ -24,9 +26,7 @@ var updateSplitterGolden = flag.Bool("updateSplitterGolden", false, "update Spli
 
 func TestNewSplitHansardDocumentPlan(t *testing.T) {
 	type args struct {
-		fixtureLabel  string
-		pdfSourcePath string
-		planDir       string
+		fixtureLabel string
 	}
 	tests := []struct {
 		name    string
@@ -34,10 +34,10 @@ func TestNewSplitHansardDocumentPlan(t *testing.T) {
 		want    *hansard.SplitHansardDocumentPlan
 		wantErr bool
 	}{
-		{"happy #1", args{"HDOC-Lisan-1-20", "testdata/a.yml", "testdata/split-case-1.yaml"}, nil, false},
-		{"happy #2", args{"HDOC-BukanLisan-1-20", "testdata/a.yml", "testdata/split-case-2.yaml"}, nil, false},
-		{"sad #1", args{"Bad-HDOC-Lisan-1-20", "testdata/a.yml", "testdata/split-case-3.yaml"}, nil, true},
-		{"sad #2", args{"Bad-HDOC-BukanLisan-1-20", "testdata/a.yml", "testdata/split-case-4.yaml"}, nil, true},
+		{"happy #1", args{"HDOC-Lisan-1-20"}, nil, false},
+		{"happy #2", args{"HDOC-BukanLisan-1-20"}, nil, false},
+		{"sad #1", args{"Bad-HDOC-Lisan-1-20"}, nil, true},
+		{"sad #2", args{"Bad-HDOC-BukanLisan-1-20"}, nil, true},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
@@ -49,22 +49,16 @@ func TestNewSplitHansardDocumentPlan(t *testing.T) {
 			}
 			// Comment out below if need to see the output in dir
 			defer os.RemoveAll(dir)
-			log.Println("Dir is ", dir)
+			// DEBUG
+			//log.Println("Dir is ", dir)
 			// Load sample PDFs and check against the plan passed in
 			// use the sample version so test cases not too long .. WILL be loaded from testdata fixture
 			// Prefix with  plan-sample as it is a PLAN made from SAMPLE of the Fixture in testdata already
 			// should FAIL if not found!
 			pdfDoc := samplePDFFromFixture(t, tt.args.fixtureLabel, "")
-			//  TODO: derive filename from tt.args.pdfSourcePath
 			// Init
-			// TODO: Should probably refactor into  an init function; and put more into method ..
-			var planDir string
-			if tt.args.planDir == "" {
-				planDir = dir + "/data"
-			}
 			confDUNSession := "confDUNSession"
 			got := hansard.SplitHansardDocumentPlan{
-				PlanDir: planDir,
 				HansardDocument: hansard.HansardDocument{
 					StateAssemblySession: confDUNSession,
 					HansardQuestions:     []hansard.HansardQuestion{},
@@ -84,7 +78,6 @@ func TestNewSplitHansardDocumentPlan(t *testing.T) {
 			// Save the PLan for use by LoadPLan
 			goldenLabel := "plan-sample-" + tt.args.fixtureLabel
 			want := hansard.SplitHansardDocumentPlan{
-				PlanDir: planDir,
 				HansardDocument: hansard.HansardDocument{
 					StateAssemblySession: confDUNSession,
 					HansardQuestions:     []hansard.HansardQuestion{},
@@ -106,10 +99,6 @@ func TestNewSplitHansardDocumentPlan(t *testing.T) {
 				//litter.Dump(tt.want)
 				//litter.Dump(got)
 			}
-
-			// Check it is actually saved in right location .. :P; if plandir was nto passed in  ..
-			// See if filename is correct
-			// Check ocntent in load? against the fixture?
 		})
 	}
 }
@@ -119,11 +108,16 @@ func TestSplitHansardDocumentPlan_SavePlan(t *testing.T) {
 		fixtureLabel string
 	}
 	tests := []struct {
-		name    string
-		args    args
-		wantErr bool
+		name            string
+		args            args
+		expectedPlanDir string
+		wantErr         bool
+		expectPlanFile  bool
 	}{
-		// TODO: Add test cases.
+		{"default data folder", args{"HDOC-Lisan-1-20"}, "", false, true},
+		{"custom data folder", args{"HDOC-BukanLisan-1-20"}, "custom/datadir", false, true},
+		{"absolute custom data folder", args{"HDOC-BukanLisan-1-20"}, "/tmp/datadir", false, true}, // Will do this when have absolutePath helper function
+		{"bad plan not saved", args{"Bad-HDOC-Lisan-1-20"}, "", true, false},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
@@ -134,36 +128,41 @@ func TestSplitHansardDocumentPlan_SavePlan(t *testing.T) {
 			}
 			// Comment out below if need to see the output in dir
 			defer os.RemoveAll(dir)
-			log.Println("Dir is ", dir)
+			// DEBUG
+			//log.Println("Dir is ", dir)
 
-			s := &hansard.SplitHansardDocumentPlan{
-				PlanDir: dir,
+			confDUNSession := "confDUNSession"
+			// want load from goldenImage
+			// Save the PLan for use by LoadPLan
+			goldenLabel := "plan-sample-" + tt.args.fixtureLabel
+			s := hansard.SplitHansardDocumentPlan{
+				HansardDocument: hansard.HansardDocument{
+					StateAssemblySession: confDUNSession,
+					HansardQuestions:     []hansard.HansardQuestion{},
+				},
 			}
-			// Check against golden file for it ??
-			// We pass "" for pdfPath as it will load from testdata; failing it should FAIL LOUDLY
-			hansardDoc := loadPlanSampleFixture(t, tt.args.fixtureLabel, "")
-			s.HansardDocument = *hansardDoc
-			// Now persist it
-			if err := s.SavePlan(); (err != nil) != tt.wantErr {
-				t.Errorf("SavePlan() error = %v, wantErr %v", err, tt.wantErr)
-			}
-			// Output the yaml file in dir/abc.yaml; and compare ..
-			// Load the want to compare against ..
-			want := hansard.SplitHansardDocumentPlan{
-				PlanDir: "testdata/abc.yaml",
-			}
-			lerr := want.LoadPlan()
-			if lerr != nil {
-				// should NOT happen!
-				t.Fatal(lerr)
-			}
+			// load from Golden copy; assume past tests has been run ..
+			loadPlanFromGolden(t, goldenLabel, &s.HansardDocument)
 
-			// Compare the fiff it
-			// Show diff if any .. instruct ..
-			if diff := cmp.Diff(want.HansardDocument, s.HansardDocument); diff != "" {
-				t.Errorf("hansardQuestions mismatch (-want +got):\n%s", diff)
+			// DEBUG
+			fmt.Println(litter.Sdump(s))
+			// Run the save, catch invalid plans
+			if serr := s.SavePlan(); (serr != nil) != tt.wantErr {
+				t.Errorf("SavePlan() error = %v, wantErr %v", serr, tt.wantErr)
+				return
 			}
-
+			var expectedPlanDir string
+			// and check the files created (split,.yml in the right location); if get this far ..
+			// Absolute or relative ..
+			if filepath.IsAbs(tt.expectedPlanDir) {
+				expectedPlanDir = tt.expectedPlanDir
+			} else {
+				expectedPlanDir = dir + tt.expectedPlanDir
+			}
+			fmt.Println("WANT PLAN FILE:" + expectedPlanDir + "/split.yml")
+			if _, err := os.Stat(expectedPlanDir + "/split.yml"); os.IsNotExist(err) {
+				// path/to/whatever does not exist
+			}
 		})
 	}
 }
@@ -312,7 +311,8 @@ func loadPlanFromGolden(t *testing.T, goldenLabel string, hansardDoc *hansard.Ha
 
 	// Read from cache; if not exist; complain that need to update
 	goldenPath := filepath.Join("testdata", goldenLabel+".golden")
-	fmt.Println("GOLDEN FILE: ", goldenPath)
+	// DEBUG
+	//fmt.Println("GOLDEN FILE: ", goldenPath)
 
 	// Case when update  flag is passed; update and eye-ball the changes ,,
 	if *updateSplitterGolden {
