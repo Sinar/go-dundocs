@@ -1,9 +1,14 @@
 package hansard
 
 import (
+	"errors"
 	"fmt"
+	"io/ioutil"
+	"os"
 	"path/filepath"
 	"strings"
+
+	"gopkg.in/yaml.v2"
 )
 
 // Configuration of a Context from outside-in ..
@@ -117,11 +122,45 @@ func NewSplitHansardDocumentPlanContent(pdfDoc *PDFDocument, splitPlan *SplitHan
 	if err != nil {
 		return err
 	}
+	// Some basic validtion check; need to be valid type
+	if splitPlan.HansardDocument.HansardType == HANSARD_INVALID {
+		return errors.New("INVALID PLAN!!")
+	}
+	if len(splitPlan.HansardDocument.HansardQuestions) == 0 {
+		return errors.New("EMPTY PLAN!!")
+	}
 	return nil
 }
 
 func (s *SplitHansardDocumentPlan) SavePlan() error {
 	// Persist HansardDoc into storage; whatever it may be ..
+	// we know where the plan is to be saved ..
+	// Pre-req plan checks first .. is this a dupe?
+	if s.HansardDocument.HansardType == HANSARD_INVALID {
+		return errors.New("INVALID PLAN!!")
+	}
+	if len(s.HansardDocument.HansardQuestions) == 0 {
+		return errors.New("EMPTY PLAN!!")
+	}
+	// Make dir if needed ..
+	mkerr := os.MkdirAll(s.PlanDir, 0744)
+	if mkerr != nil {
+		// If no permission; die!
+		if os.IsPermission(mkerr) {
+			panic(mkerr)
+		}
+	}
+	// OK, pre-reqs done
+	b, merr := yaml.Marshal(s.HansardDocument)
+	if merr != nil {
+		return merr
+	}
+	// Write into the pre-defined filename ..
+	werr := ioutil.WriteFile(s.PlanDir+"/split.yml", b, 0644)
+	if werr != nil {
+		return werr
+	}
+	// All okie ..
 	return nil
 }
 

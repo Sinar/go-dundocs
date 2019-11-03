@@ -8,8 +8,6 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/sanity-io/litter"
-
 	"github.com/google/go-cmp/cmp/cmpopts"
 
 	"github.com/google/go-cmp/cmp"
@@ -143,32 +141,44 @@ func TestSplitHansardDocumentPlan_SavePlan(t *testing.T) {
 			// DEBUG
 			//fmt.Println(litter.Sdump(s))
 			// Run the save, catch invalid plans
-			if serr := s.SavePlan(); (serr != nil) != tt.wantErr {
+			serr := s.SavePlan()
+			if (serr != nil) != tt.wantErr {
 				t.Errorf("SavePlan() error = %v, wantErr %v", serr, tt.wantErr)
 				return
 			}
-			// Check planDir actually created and exists ..
-			if _, err := os.Stat(absolutePlanDir); os.IsNotExist(err) {
-				t.Errorf("PLANDIR_MISSING: %s", err)
-				return
+			// If OK, do the rest of the checks
+			if serr == nil {
+				if serr := s.SavePlan(); (serr != nil) != tt.wantErr {
+					t.Errorf("SavePlan() error = %v, wantErr %v", serr, tt.wantErr)
+					return
+				}
+				// Check planDir actually created and exists ..
+				if _, err := os.Stat(absolutePlanDir); os.IsNotExist(err) {
+					t.Errorf("PLANDIR_MISSING: %s", err)
+					return
+				}
+				// Check split file in known place
+				if _, err := os.Stat(absolutePlanDir + "/split.yml"); os.IsNotExist(err) {
+					// DEBUG
+					//fmt.Println("EXPECT:" + expectedPlanDir + "/split.yml")
+					// path/to/whatever does not exist
+					t.Errorf("SPLITPLAN_MISSING: %s", err)
+					return
+				}
+				// If plan file exist; check its content; is it necessary?
+				contentYAML, rerr := ioutil.ReadFile(absolutePlanDir + "/split.yml")
+				if rerr != nil {
+					t.Fatalf("ERR: %s", rerr.Error())
+				}
+				var gotPlan hansard.HansardDocument
+				umerr := yaml.Unmarshal(contentYAML, &gotPlan)
+				if umerr != nil {
+					panic(umerr)
+				}
+				if diff := cmp.Diff(s.HansardDocument, gotPlan); diff != "" {
+					t.Errorf("Plan mismatch (-want +got):\n%s", diff)
+				}
 			}
-			// Check split file in known place
-			if _, err := os.Stat(absolutePlanDir + "/split.yml"); os.IsNotExist(err) {
-				// DEBUG
-				//fmt.Println("EXPECT:" + expectedPlanDir + "/split.yml")
-				// path/to/whatever does not exist
-				t.Errorf("SPLITPLAN_MISSING: %s", err)
-				return
-			}
-			// If plan file exist; check its string equivalent
-			content, rerr := ioutil.ReadFile(absolutePlanDir + "/split.yml")
-			if rerr != nil {
-				t.Fatalf("ERR: %s", rerr.Error())
-			}
-			if diff := cmp.Diff(litter.Sdump(s), litter.Sdump(content)); diff != "" {
-				t.Errorf("Plan mismatch (-want +got):\n%s", diff)
-			}
-
 		})
 	}
 }
