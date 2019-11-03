@@ -1,5 +1,11 @@
 package hansard
 
+import (
+	"fmt"
+	"path/filepath"
+	"strings"
+)
+
 // Configuration of a Context from outside-in ..
 type Configuration struct {
 	// DUN Session Label
@@ -7,6 +13,9 @@ type Configuration struct {
 
 	// ./raw + ./data folders are assumed to be relative to this dir
 	WorkingDir string
+
+	// Data directory name; can be relative or absolute?
+	DataDir string
 
 	// Source PDF can be anywhere; maybe make it a Reader to be read direct from S3?
 	SourcePDFPath string
@@ -16,9 +25,57 @@ type Configuration struct {
 }
 
 type SplitHansardDocumentPlan struct {
-	workingDir      string
+	dataDir         string
 	PlanDir         string
 	HansardDocument HansardDocument
+}
+
+func GetAbsoluteDataDir(workingDir, dataDir string) string {
+	// If absolute already not needed to do anything ..
+	if filepath.IsAbs(dataDir) {
+		return dataDir
+	}
+	// OK, now apply the rules
+	var absoluteDataDir string
+	// If no dataDir; do a default
+	if dataDir == "" {
+		absoluteDataDir = workingDir + "/data"
+	} else {
+		absoluteDataDir = workingDir + fmt.Sprintf("/%s", dataDir)
+	}
+	// DEBUG
+	//if absoluteDataDir == "" {
+	//	panic(fmt.Errorf("BEFORE: %s AFTER: %s", dataDir, absoluteDataDir))
+	//}
+	return absoluteDataDir
+}
+
+func NewEmptySplitHansardDocumentPlan(absoluteDataDir, absolutePlanDir, sessionName string) *SplitHansardDocumentPlan {
+	// Assume: sourcePDFFilename stripped off; validation here??
+	// Assume: dataDir and PlanDir must become absolute before passing it back? Validate?
+	if !(filepath.IsAbs(absoluteDataDir) && filepath.IsAbs(absolutePlanDir)) {
+		panic(fmt.Errorf("DATA: %s + PLAN: %s MUST BE ABSOLUTE!", absoluteDataDir, absolutePlanDir))
+	}
+	// If absolute dataDir; just take it  as is, no use for workingDir
+	//absoluteDataDir := GetAbsoluteDataDir(workingDir, dataDir)
+	// Extract out filename as folder for split.yml plan
+	// https://stackoverflow.com/questions/13027912/trim-strings-suffix-or-extension
+	//basePDFPath := filepath.Base(sourcePDFPath)
+	//planDir := absoluteDataDir + fmt.Sprintf("/%s", strings.TrimSuffix(basePDFPath, filepath.Ext(basePDFPath)))
+	//// DEBUG
+	//fmt.Println("PLAN_PATH: ", planDir)
+	// Do abs conversion here?? for PlanDir only? Is it needed; is relative good enough? Maybe ..
+	//<TODO>??
+	// Assemble the pieces here ..
+	splitPlan := SplitHansardDocumentPlan{
+		dataDir: absoluteDataDir,
+		PlanDir: absolutePlanDir,
+		HansardDocument: HansardDocument{
+			StateAssemblySession: sessionName,
+			HansardQuestions:     []HansardQuestion{},
+		},
+	}
+	return &splitPlan
 }
 
 func NewSplitHansardDocumentPlan(conf Configuration) *SplitHansardDocumentPlan {
@@ -29,26 +86,30 @@ func NewSplitHansardDocumentPlan(conf Configuration) *SplitHansardDocumentPlan {
 		panic(nperr)
 	}
 	// Once have the  content  to be  processed; pass it all on after using the config  to adjust things ..
-	// If no PLanDir; do a default
-	planDir := conf.WorkingDir + "/data"
-	// TODO: Make the  workingDir into absolute  before  instantiate
+	// TODO: Make the  dataDir into absolute  before  instantiate
 	// It will later need to  be append with Type (string version) + filename .. + split.yml
 	// TODO: Filename needs to be  extracted out; and need to handle those cases with '.' in filename
-	splitPlan := SplitHansardDocumentPlan{
-		workingDir: conf.WorkingDir,
-		PlanDir:    planDir,
-		HansardDocument: HansardDocument{
-			StateAssemblySession: conf.DUNSession,
-		},
-	}
+	//splitPlan := SplitHansardDocumentPlan{
+	//	dataDir: conf.WorkingDir,
+	//	PlanDir: planDir,
+	//	HansardDocument: HansardDocument{
+	//		StateAssemblySession: conf.DUNSession,
+	//	},
+	//}
+	absoluteDataDir := GetAbsoluteDataDir(conf.WorkingDir, conf.DataDir)
+	// Extract out filename as folder for split.yml plan
+	// https://stackoverflow.com/questions/13027912/trim-strings-suffix-or-extension
+	basePDFPath := filepath.Base(conf.SourcePDFPath)
+	absolutePlanDir := absoluteDataDir + fmt.Sprintf("/%s", strings.TrimSuffix(basePDFPath, filepath.Ext(basePDFPath)))
+	splitPlan := NewEmptySplitHansardDocumentPlan(absoluteDataDir, absolutePlanDir, conf.DUNSession)
 	// Fill in the needed  plan
-	err := NewSplitHansardDocumentPlanContent(pdfDoc, &splitPlan)
+	err := NewSplitHansardDocumentPlanContent(pdfDoc, splitPlan)
 	if err != nil {
 		panic(err)
 	}
 	// DEBUG
 	//spew.Dump(splitPlan)
-	return &splitPlan
+	return splitPlan
 }
 
 func NewSplitHansardDocumentPlanContent(pdfDoc *PDFDocument, splitPlan *SplitHansardDocumentPlan) error {

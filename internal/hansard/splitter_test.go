@@ -25,7 +25,7 @@ func TestSplitHansardDocumentPlan_detectSessionName(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			s := &SplitHansardDocumentPlan{
-				workingDir:      tt.fields.workingDir,
+				dataDir:         tt.fields.workingDir,
 				PlanDir:         tt.fields.planDir,
 				HansardDocument: tt.fields.HansardDocument,
 			}

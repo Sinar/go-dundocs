@@ -2,7 +2,6 @@ package hansard_test
 
 import (
 	"flag"
-	"fmt"
 	"io/ioutil"
 	"log"
 	"os"
@@ -110,14 +109,15 @@ func TestSplitHansardDocumentPlan_SavePlan(t *testing.T) {
 	tests := []struct {
 		name            string
 		args            args
+		dataDir         string
 		expectedPlanDir string
 		wantErr         bool
 		expectPlanFile  bool
 	}{
-		{"default data folder", args{"HDOC-Lisan-1-20"}, "", false, true},
-		{"custom data folder", args{"HDOC-BukanLisan-1-20"}, "custom/datadir", false, true},
-		{"absolute custom data folder", args{"HDOC-BukanLisan-1-20"}, "/tmp/datadir", false, true}, // Will do this when have absolutePath helper function
-		{"bad plan not saved", args{"Bad-HDOC-Lisan-1-20"}, "", true, false},
+		{"default data folder", args{"HDOC-Lisan-1-20"}, "", "data/HDOC-Lisan-1-20", false, true},
+		{"custom data folder", args{"HDOC-BukanLisan-1-20"}, "custom/datadir", "custom/datadir/HDOC-BukanLisan-1-20", false, true},
+		{"absolute custom data folder", args{"HDOC-BukanLisan-1-20"}, "/tmp/datadir", "/tmp/datadir/HDOC-BukanLisan-1-20", false, true}, // Will do this when have absolutePath helper function
+		{"bad plan not saved", args{"Bad-HDOC-Lisan-1-20"}, "", "", true, false},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
@@ -130,39 +130,45 @@ func TestSplitHansardDocumentPlan_SavePlan(t *testing.T) {
 			defer os.RemoveAll(dir)
 			// DEBUG
 			//log.Println("Dir is ", dir)
-
-			confDUNSession := "confDUNSession"
 			// want load from goldenImage
 			// Save the PLan for use by LoadPLan
 			goldenLabel := "plan-sample-" + tt.args.fixtureLabel
-			s := hansard.SplitHansardDocumentPlan{
-				HansardDocument: hansard.HansardDocument{
-					StateAssemblySession: confDUNSession,
-					HansardQuestions:     []hansard.HansardQuestion{},
-				},
-			}
+			absoluteDataDir := hansard.GetAbsoluteDataDir(dir, tt.dataDir)
+			absolutePlanDir := absoluteDataDir + "/" + tt.args.fixtureLabel
+			s := hansard.NewEmptySplitHansardDocumentPlan(absoluteDataDir, absolutePlanDir, "confDUNSession")
+			// DEBUG
+			//spew.Dump(s)
 			// load from Golden copy; assume past tests has been run ..
 			loadPlanFromGolden(t, goldenLabel, &s.HansardDocument)
-
 			// DEBUG
-			fmt.Println(litter.Sdump(s))
+			//fmt.Println(litter.Sdump(s))
 			// Run the save, catch invalid plans
 			if serr := s.SavePlan(); (serr != nil) != tt.wantErr {
 				t.Errorf("SavePlan() error = %v, wantErr %v", serr, tt.wantErr)
 				return
 			}
-			var expectedPlanDir string
-			// and check the files created (split,.yml in the right location); if get this far ..
-			// Absolute or relative ..
-			if filepath.IsAbs(tt.expectedPlanDir) {
-				expectedPlanDir = tt.expectedPlanDir
-			} else {
-				expectedPlanDir = dir + tt.expectedPlanDir
+			// Check planDir actually created and exists ..
+			if _, err := os.Stat(absolutePlanDir); os.IsNotExist(err) {
+				t.Errorf("PLANDIR_MISSING: %s", err)
+				return
 			}
-			fmt.Println("WANT PLAN FILE:" + expectedPlanDir + "/split.yml")
-			if _, err := os.Stat(expectedPlanDir + "/split.yml"); os.IsNotExist(err) {
+			// Check split file in known place
+			if _, err := os.Stat(absolutePlanDir + "/split.yml"); os.IsNotExist(err) {
+				// DEBUG
+				//fmt.Println("EXPECT:" + expectedPlanDir + "/split.yml")
 				// path/to/whatever does not exist
+				t.Errorf("SPLITPLAN_MISSING: %s", err)
+				return
 			}
+			// If plan file exist; check its string equivalent
+			content, rerr := ioutil.ReadFile(absolutePlanDir + "/split.yml")
+			if rerr != nil {
+				t.Fatalf("ERR: %s", rerr.Error())
+			}
+			if diff := cmp.Diff(litter.Sdump(s), litter.Sdump(content)); diff != "" {
+				t.Errorf("Plan mismatch (-want +got):\n%s", diff)
+			}
+
 		})
 	}
 }
