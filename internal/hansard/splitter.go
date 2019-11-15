@@ -169,9 +169,24 @@ func (s *SplitHansardDocumentPlan) LoadPlan() error {
 	return nil
 }
 
-func (s *SplitHansardDocumentPlan) ExecuteSplit() error {
+func (s *SplitHansardDocumentPlan) ExecuteSplit(absoluteSrcPDF string) error {
+	// Assume: absoluteSrcPDF must be absolute before passing it back? Validate?
+	if !(filepath.IsAbs(absoluteSrcPDF)) {
+		panic(fmt.Errorf("PDF: %s MUST BE ABSOLUTE!", absoluteSrcPDF))
+	}
+
+	if len(s.HansardDocument.HansardQuestions) == 0 {
+		return fmt.Errorf("Empty %s", absoluteSrcPDF)
+	}
+	fmt.Println("INSIDE: XSPLIT; splitting ", absoluteSrcPDF)
 	// Traverse the HansardDoc
 	// Traverse  each question in the HansardDoc
+	for _, hansardQuestion := range s.HansardDocument.HansardQuestions {
+		// DEBUG!
+		//spew.Dump(hansardQuestion)
+		// DO the actuak split ..
+		fmt.Println("Split Question: ", hansardQuestion.QuestionNum)
+	}
 
 	return nil
 }

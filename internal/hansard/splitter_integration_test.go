@@ -240,12 +240,15 @@ func TestSplitHansardDocumentPlan_ExecuteSplit(t *testing.T) {
 		{"no plan #1", fields{"", hansard.HansardDocument{
 			StateAssemblySession: "",
 		}}, true},
-		{"happy #1", fields{"", hansard.HansardDocument{
+		{"happy #1", fields{"./testdata/happy1-plan-execute", hansard.HansardDocument{
 			StateAssemblySession: "",
 			HansardType:          0,
-			HansardQuestions:     nil,
+			HansardQuestions: []hansard.HansardQuestion{
+				{"bob", 1, 2},
+				{"stevie", 3, 10},
+			},
 		}}, false},
-		{"happy #2", fields{"", hansard.HansardDocument{
+		{"happy #2", fields{"./testdata/happy2-plan-execute", hansard.HansardDocument{
 			HansardType:      0,
 			HansardQuestions: nil,
 		}}, false},
@@ -266,22 +269,42 @@ func TestSplitHansardDocumentPlan_ExecuteSplit(t *testing.T) {
 			// Comment out below if need to see the output in dir
 			//defer os.RemoveAll(dir)
 			log.Println("Dir is ", dir)
+			// Is below redundant?
+			absoluteDataDir, dderr := filepath.Abs(dir)
+			if dderr != nil {
+				panic(dderr)
+			}
+			absolutePlanDir, plerr := filepath.Abs(tt.fields.planDir)
+			if plerr != nil {
+				panic(plerr)
+			}
+			absoluteSrcPDF, sperr := filepath.Abs("testdata/bob.pdf")
+			if sperr != nil {
+				panic(sperr)
+			}
+			// DEBUG
+			//fmt.Println("DATA_PATH: ", absoluteDataDir, " PLAN_PATH: ", absolutePlanDir)
+			s := hansard.NewEmptySplitHansardDocumentPlan(absoluteDataDir, absolutePlanDir, "session-plan-execute")
+			// Plan loaded; assume it is extracted from split.yml
+			s.HansardDocument = tt.fields.hansardDocument
+			// DEBUG
+			//spew.Dump(s)
+			// Execute the actual split; with one test PDF?
+			exerr := s.ExecuteSplit(absoluteSrcPDF)
 
-			s := &hansard.SplitHansardDocumentPlan{
-				PlanDir:         tt.fields.planDir,
-				HansardDocument: tt.fields.hansardDocument,
+			if (exerr != nil) != tt.wantErr {
+				t.Errorf("ExecuteSplit() error = %v, wantErr %v", exerr, tt.wantErr)
 			}
-			// Prep first; load actual plan from the test cases ..
-			lerr := s.LoadPlan()
-			if lerr != nil {
-				// Should NOT happen!
-				t.Fatal(lerr)
+			if exerr != nil {
+				return
 			}
-			// Execute the actual split ...
-			if err := s.ExecuteSplit(); (err != nil) != tt.wantErr {
-				t.Errorf("ExecuteSplit() error = %v, wantErr %v", err, tt.wantErr)
+
+			_, rerr := ioutil.ReadFile(dir + "/bobo.pdf")
+			if rerr != nil {
+				t.Errorf("cannot read: %s", rerr)
 			}
 			// Open the output in the WorkDir and see if it has the expected number of files
+			// Pattern in dataDir ==> base_filename_question_<nn>
 			// Should we check content? probably no need .. what about filename; is it important; no for now ..
 		})
 	}
