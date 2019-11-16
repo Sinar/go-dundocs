@@ -225,10 +225,8 @@ func TestSplitHansardDocumentPlan_LoadPlan(t *testing.T) {
 }
 
 func TestSplitHansardDocumentPlan_ExecuteSplit(t *testing.T) {
-	type args struct {
-		planLabel string // Plan Fixture .. not needed, we can make it small enough
-	}
 	type fields struct {
+		srcPDFPath      string
 		planDir         string
 		hansardDocument hansard.HansardDocument
 	}
@@ -237,20 +235,21 @@ func TestSplitHansardDocumentPlan_ExecuteSplit(t *testing.T) {
 		fields  fields
 		wantErr bool
 	}{
-		{"no plan #1", fields{"", hansard.HansardDocument{
-			StateAssemblySession: "",
-		}}, true},
-		{"happy #1", fields{"./testdata/happy1-plan-execute", hansard.HansardDocument{
-			StateAssemblySession: "",
-			HansardType:          0,
+		{"no plan #1", fields{"", "", hansard.HansardDocument{}}, true},
+		{"happy #1", fields{"testdata/BukanLisan_41_60_36_39.pdf", "testdata/happy1-plan-execute", hansard.HansardDocument{
 			HansardQuestions: []hansard.HansardQuestion{
-				{"bob", 1, 2},
-				{"stevie", 3, 10},
+				{"58", 1, 1},
+				{"59", 2, 3},
+				{"60", 4, 4},
 			},
 		}}, false},
-		{"happy #2", fields{"./testdata/happy2-plan-execute", hansard.HansardDocument{
-			HansardType:      0,
-			HansardQuestions: nil,
+		{"happy #2", fields{"testdata/Lisan_Mulut_261_272.pdf", "testdata/happy2-plan-execute", hansard.HansardDocument{
+			HansardType: 0,
+			HansardQuestions: []hansard.HansardQuestion{
+				{"269", 1, 1},
+				{"270", 2, 4},
+				{"271", 5, 5},
+			},
 		}}, false},
 	}
 	// Prepare the PDF test cases we will use in the tests ..
@@ -278,7 +277,7 @@ func TestSplitHansardDocumentPlan_ExecuteSplit(t *testing.T) {
 			if plerr != nil {
 				panic(plerr)
 			}
-			absoluteSrcPDF, sperr := filepath.Abs("testdata/bob.pdf")
+			absoluteSrcPDF, sperr := filepath.Abs(tt.fields.srcPDFPath)
 			if sperr != nil {
 				panic(sperr)
 			}
