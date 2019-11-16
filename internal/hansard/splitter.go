@@ -166,10 +166,22 @@ func (s *SplitHansardDocumentPlan) SavePlan() error {
 
 func (s *SplitHansardDocumentPlan) LoadPlan() error {
 	// Load into the struct HansardDoc from the persistent storage ..
+	hansardDoc := HansardDocument{}
+	b, rerr := ioutil.ReadFile(s.PlanDir)
+	if rerr != nil {
+		return rerr
+	}
+	umerr := yaml.Unmarshal(b, &hansardDoc)
+	if umerr != nil {
+		return umerr
+	}
+	// attach plan
+	s.HansardDocument = hansardDoc
+	// All OK!
 	return nil
 }
 
-func (s *SplitHansardDocumentPlan) ExecuteSplit(absoluteSrcPDF string) error {
+func (s *SplitHansardDocumentPlan) ExecuteSplit(absoluteSrcPDF, absoluteSplitOutput string) error {
 	// Assume: absoluteSrcPDF must be absolute before passing it back? Validate?
 	if !(filepath.IsAbs(absoluteSrcPDF)) {
 		panic(fmt.Errorf("PDF: %s MUST BE ABSOLUTE!", absoluteSrcPDF))
@@ -184,8 +196,11 @@ func (s *SplitHansardDocumentPlan) ExecuteSplit(absoluteSrcPDF string) error {
 	for _, hansardQuestion := range s.HansardDocument.HansardQuestions {
 		// DEBUG!
 		//spew.Dump(hansardQuestion)
+		finalFileName := "wassup!!"
 		// DO the actuak split ..
 		fmt.Println("Split Question: ", hansardQuestion.QuestionNum)
+		// Write the splitoutput  to this final location
+		fmt.Println("Save  split file into Dir: "+absoluteSplitOutput+" w/ fileName: ", finalFileName)
 	}
 
 	return nil

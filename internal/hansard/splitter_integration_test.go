@@ -2,6 +2,7 @@ package hansard_test
 
 import (
 	"flag"
+	"fmt"
 	"io/ioutil"
 	"log"
 	"os"
@@ -194,22 +195,30 @@ func TestSplitHansardDocumentPlan_LoadPlan(t *testing.T) {
 		wantErr bool
 	}{
 		// NOTE: Not too nice; still tied to physical path that are not in testdata
-		{"happy #1", args{"HDOC-Lisan-1-20"}, "testdata/split-case-1.yaml", false},
-		{"happy #2", args{"HDOC-BukanLisan-1-20"}, "testdata/split-case-2.yaml", false},
-		{"sad #1", args{"Bad-HDOC-Lisan-1-20"}, "testdata/split-case-3.yaml", false},
-		{"sad #2", args{"Bad-HDOC-BukanLisan-1-20"}, "testdata/split-case-4.yaml", false},
+		{"happy #1", args{"HDOC-Lisan-1-20"}, "testdata/plan-sample-HDOC-Lisan-1-20.golden", false},
+		{"happy #2", args{"HDOC-BukanLisan-1-20"}, "testdata/plan-sample-HDOC-BukanLisan-1-20.golden", false},
+		{"sad #1", args{"Bad-HDOC-Lisan-1-20"}, "testdata/plan-sample-Bad-HDOC-Lisan-1-20.golden", false},
+		{"sad #2", args{"Bad-HDOC-BukanLisan-1-20"}, "testdata/plan-sample-Bad-HDOC-BukanLisan-1-20.golden", false},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			// Setup where the plan is
-			s := &hansard.SplitHansardDocumentPlan{
-				PlanDir: tt.planDir,
+			absoluteDataDir, dderr := filepath.Abs(".")
+			if dderr != nil {
+				panic(dderr)
 			}
+			absolutePlanDir, plerr := filepath.Abs(tt.planDir)
+			if plerr != nil {
+				panic(plerr)
+			}
+			// DEBUG
+			//fmt.Println("DATA_PATH: ", absoluteDataDir, " PLAN_PATH: ", absolutePlanDir)
+			s := hansard.NewEmptySplitHansardDocumentPlan(absoluteDataDir, absolutePlanDir, "dun15sesi3")
 			// Load it into the struct
 			if err := s.LoadPlan(); (err != nil) != tt.wantErr {
 				t.Errorf("LoadPlan() error = %v, wantErr %v", err, tt.wantErr)
 			}
-			got := s.HansardDocument
+			got := &s.HansardDocument
 			// Now compare against the Plan related to the PDF Fixture (from Hansard Integration) we test against
 			// which will be persisted to Golden plans
 			// We pass "" for pdfPath as it will load from testdata; failing it should FAIL LOUDLY
@@ -231,18 +240,23 @@ func TestSplitHansardDocumentPlan_ExecuteSplit(t *testing.T) {
 		hansardDocument hansard.HansardDocument
 	}
 	tests := []struct {
-		name    string
-		fields  fields
-		wantErr bool
+		name        string
+		fields      fields
+		wantErr     bool
+		wantedFiles []string
 	}{
-		{"no plan #1", fields{"", "", hansard.HansardDocument{}}, true},
+		{"no plan #1", fields{"", "", hansard.HansardDocument{}}, true, []string{}},
 		{"happy #1", fields{"testdata/BukanLisan_41_60_36_39.pdf", "testdata/happy1-plan-execute", hansard.HansardDocument{
 			HansardQuestions: []hansard.HansardQuestion{
 				{"58", 1, 1},
 				{"59", 2, 3},
 				{"60", 4, 4},
 			},
-		}}, false},
+		}}, false, []string{
+			"dun15sesi3-BukanLisan_41_60_36_39-58.pdf",
+			"dun15sesi3-BukanLisan_41_60_36_39-q59.pdf",
+			"dun15sesi3-BukanLisan_41_60_36_39-q60.pdf",
+		}},
 		{"happy #2", fields{"testdata/Lisan_Mulut_261_272.pdf", "testdata/happy2-plan-execute", hansard.HansardDocument{
 			HansardType: 0,
 			HansardQuestions: []hansard.HansardQuestion{
@@ -250,7 +264,11 @@ func TestSplitHansardDocumentPlan_ExecuteSplit(t *testing.T) {
 				{"270", 2, 4},
 				{"271", 5, 5},
 			},
-		}}, false},
+		}}, false, []string{
+			"dun15sesi3-Lisan_Mulut_261_272-269.pdf",
+			"dun15sesi3-Lisan_Mulut_261_272-270.pdf",
+			"dun15sesi3-Lisan_Mulut_261_272-271.pdf",
+		}},
 	}
 	// Prepare the PDF test cases we will use in the tests ..
 	// Same as used in  hansard_integration_tests; we will run them  here to set it up
@@ -283,28 +301,34 @@ func TestSplitHansardDocumentPlan_ExecuteSplit(t *testing.T) {
 			}
 			// DEBUG
 			//fmt.Println("DATA_PATH: ", absoluteDataDir, " PLAN_PATH: ", absolutePlanDir)
-			s := hansard.NewEmptySplitHansardDocumentPlan(absoluteDataDir, absolutePlanDir, "session-plan-execute")
+			s := hansard.NewEmptySplitHansardDocumentPlan(absoluteDataDir, absolutePlanDir, "dun15sesi3")
 			// Plan loaded; assume it is extracted from split.yml
 			s.HansardDocument = tt.fields.hansardDocument
 			// DEBUG
 			//spew.Dump(s)
+			// Default splitout location; will be created if needed ..
+			absoluteSplitOutput := dir + "/splitout"
 			// Execute the actual split; with one test PDF?
-			exerr := s.ExecuteSplit(absoluteSrcPDF)
-
+			exerr := s.ExecuteSplit(absoluteSrcPDF, absoluteSplitOutput)
 			if (exerr != nil) != tt.wantErr {
 				t.Errorf("ExecuteSplit() error = %v, wantErr %v", exerr, tt.wantErr)
 			}
+
 			if exerr != nil {
 				return
 			}
 
-			_, rerr := ioutil.ReadFile(dir + "/bobo.pdf")
-			if rerr != nil {
-				t.Errorf("cannot read: %s", rerr)
+			for _, fileName := range tt.wantedFiles {
+				// DEBUG
+				fmt.Println("Check split file at: ", absoluteSplitOutput+"/"+fileName)
+				_, rerr := ioutil.ReadFile(absoluteSplitOutput + "/" + fileName)
+				if rerr != nil {
+					t.Errorf("cannot read: %s", rerr)
+				}
+				// Open the output in the WorkDir and see if it has the expected number of files
+				// Pattern in dataDir ==> base_filename_question_<nn>
+				// Should we check content? probably no need .. what about filename; is it important; no for now ..
 			}
-			// Open the output in the WorkDir and see if it has the expected number of files
-			// Pattern in dataDir ==> base_filename_question_<nn>
-			// Should we check content? probably no need .. what about filename; is it important; no for now ..
 		})
 	}
 }
@@ -330,14 +354,22 @@ func loadPlanSampleFixture(t *testing.T, fixtureLabel string, pdfPath string) *h
 	// Above  WILL FAIL for first case if TestNewHansardQuestions not run yet   when add new scenario
 
 	// Should StateAssemblySession be so deep here?
-	hansardDoc := &hansard.HansardDocument{StateAssemblySession: "testGoldenPlan"}
+	hansardDoc := &hansard.HansardDocument{StateAssemblySession: "confDUNSession"}
 	hansard.NewHansardDocumentContent(pdfDoc, hansardDoc)
 	// Read from cache; if not exist; complain that need to update
 	//goldenPath := filepath.Join("testdata", fixtureLabel+".golden")
 	//fmt.Println("GOLDEN FILE: ", goldenPath)
 
-	// Read it from planPath; which in this case is just the Golden Plan ..
-	loadPlanFromGolden(t, fixtureLabel, hansardDoc)
+	// For comparison, if empty; fill it with zero out value
+	if len(hansardDoc.HansardQuestions) == 0 {
+		hansardDoc.HansardQuestions = []hansard.HansardQuestion{}
+	}
+	// For comparison; nil HansardQuestions; need to fill it!!
+	// Alternative way to do it ..
+	//if hansardDoc.HansardQuestions == nil {
+	//	hansardDoc.HansardQuestions = []hansard.HansardQuestion{}
+	//}
+
 	// If it did NOT fatakl; we just proceed  ..
 	return hansardDoc
 }
