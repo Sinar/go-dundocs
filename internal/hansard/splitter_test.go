@@ -81,7 +81,7 @@ func Test_prepareSplitAPI(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if err := prepareSplitAPI(); (err != nil) != tt.wantErr {
+			if err := prepareSplitAPI("", ""); (err != nil) != tt.wantErr {
 				t.Errorf("prepareSplitAPI() error = %v, wantErr %v", err, tt.wantErr)
 			}
 		})

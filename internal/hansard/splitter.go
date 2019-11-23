@@ -8,6 +8,8 @@ import (
 	"path/filepath"
 	"strings"
 
+	papi "github.com/pdfcpu/pdfcpu/pkg/api"
+	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu"
 	"gopkg.in/yaml.v2"
 )
 
@@ -190,17 +192,49 @@ func (s *SplitHansardDocumentPlan) ExecuteSplit(absoluteSrcPDF, absoluteSplitOut
 	if len(s.HansardDocument.HansardQuestions) == 0 {
 		return fmt.Errorf("Empty %s", absoluteSrcPDF)
 	}
-	fmt.Println("INSIDE: XSPLIT; splitting ", absoluteSrcPDF)
+	// DEBUG
+	//fmt.Println("INSIDE: XSPLIT; splitting ", absoluteSrcPDF)
+	// Prepare the splitout folder scratch space + final destination
+	scratchDir := filepath.Join(absoluteSplitOutput, "scratch")
+	createDirIfNotExist(scratchDir)
+	// Split the document into the  final destination
+	pserr := prepareSplitAPI(absoluteSrcPDF, scratchDir)
+	if pserr != nil {
+		return pserr
+	}
 	// Traverse the HansardDoc
 	// Traverse  each question in the HansardDoc
 	for _, hansardQuestion := range s.HansardDocument.HansardQuestions {
 		// DEBUG!
 		//spew.Dump(hansardQuestion)
-		finalFileName := "wassup!!"
+		// fmt.Sprintf("%s-soalan-%s.pdf", label, hq.QuestionNum)
+		finalFileName := "wassup!!" // Is this to be derived? template?
+		// Can also prepare the needed scratch spaces?
+		// Derive  the needed basename ** TODO ***
+		//srcBasename := "SRC_BASENAME"
+		//fmt.Println("Basename derived from: ", absoluteSrcPDF, " is ", srcBasename)
+		// ** TODO *** Prepare the location of merged directory too ..
+		//// Ensure the merged directory is there ..
+		//createDirIfNotExist(filepath.Join(absoluteSplitOutput, srcBasename))
+		////finalMergedPDFPath := fmt.Sprintf("%s/splitout/%s-soalan-%s-%s.pdf", currentWorkingDir, label, hansardType, hq.QuestionNum)
+		//finalMergedPDFPath := filepath.Join(absoluteSplitOutput, srcBasename, fmt.Sprintf("%s-soalan-%s.pdf", label, hq.QuestionNum))
+
 		// DO the actuak split ..
 		fmt.Println("Split Question: ", hansardQuestion.QuestionNum)
 		// Write the splitoutput  to this final location
 		fmt.Println("Save  split file into Dir: "+absoluteSplitOutput+" w/ fileName: ", finalFileName)
+		ssqerr := splitSingleQuestion(
+			s.HansardDocument.StateAssemblySession,
+			absoluteSrcPDF, absoluteSplitOutput, finalFileName,
+			hansardQuestion)
+		if ssqerr != nil {
+			// Need to determine if recoverable??
+			// What is recoverable; for now; give  up
+			//panic(ssqerr)
+			return ssqerr
+		}
+		// Below is the nicer API I think ..
+		// ssqerr := splitSingleQuestion(absoluteScratchDir, absoluteSplitOutputFMT, hansardQuestion)
 	}
 
 	return nil
@@ -220,14 +254,58 @@ func loadSplitHansardDocPlan(splitPlanPath string) *HansardDocument {
 	return &splitHansardDocPlan
 }
 
-// Peg the API on the v0.1.25 version; no  support for v0.2 yet :(
-// OK we'll try the latest API first ..
-func prepareSplitAPI() error {
+// Use the latest API v2
+func prepareSplitAPI(absoluteSrcPDF, scratchDir string) error {
+	// Relax validation  --> https://github.com/hhrutter/pdfcpu/issues/80
+	conf := pdfcpu.NewDefaultConfiguration()
+	// DEBUG
+	fmt.Println("In prepareSplitAPI!!")
+	fmt.Println("Split ", absoluteSrcPDF, " to singles in ", scratchDir)
+	sperr := papi.SplitFile(absoluteSrcPDF, scratchDir, 1, conf)
+	if sperr != nil {
+		return sperr
+	}
+	// DEBUG
+	//q.Q(o)
+
+	return nil
+}
+
+func splitSingleQuestion(label, absoluteSrcPDF, absoluteSplitOutput, finalFileName string, hq HansardQuestion) error {
+	// Derive  the needed basename
+	srcBasename := "SRC_BASENAME"
+	fmt.Println("Basename derived from: ", absoluteSrcPDF, " is ", srcBasename)
+
+	// Pre-reqs are done; now can start the split itself ..
+	var pagesToMerge []string
+
+	for i := hq.PageNumStart; i <= hq.PageNumEnd; i++ {
+		//sourcePDFPath := fmt.Sprintf("%s/raw/splitout/%s/%s/pages/%s_%d.pdf", currentWorkingDir, hansardType, sessionName, sessionName, i)
+		sourcePDFPath := filepath.Join(absoluteSplitOutput, "pages", fmt.Sprintf("%s_%d", srcBasename, i))
+		pagesToMerge = append(pagesToMerge, sourcePDFPath)
+	}
+
+	// Ensure the merged directory is there ..
+	createDirIfNotExist(filepath.Join(absoluteSplitOutput, srcBasename))
+	//finalMergedPDFPath := fmt.Sprintf("%s/splitout/%s-soalan-%s-%s.pdf", currentWorkingDir, label, hansardType, hq.QuestionNum)
+	finalMergedPDFPath := filepath.Join(absoluteSplitOutput, srcBasename, fmt.Sprintf("%s-soalan-%s.pdf", label, hq.QuestionNum))
+	fmt.Println(">>>=========== Merged file at: ", finalMergedPDFPath, " ==============<<<<<<")
+
+	// Relax validation  --> https://github.com/hhrutter/pdfcpu/issues/80
+	// Real-life data are pretty broken ..
+	conf := pdfcpu.NewDefaultConfiguration()
+	// Not needed
+	//conf.ValidationMode = pdfcpu.ValidationRelaxed
+	merr := papi.MergeFile(pagesToMerge, finalMergedPDFPath, conf)
+	if merr != nil {
+		return merr
+	}
 	return nil
 }
 
 // Backup  command to run if API having  issues
 func prepareSplit() error {
+	panic(fmt.Errorf("NOT IMPLEMENTED!!! FUNC: %s", "prepareSplit"))
 	return nil
 }
 
@@ -249,4 +327,15 @@ func normalizeTempDirAbsolutePath(relativePath string) (absolutePath string, bas
 	//	#3 No extensions
 	//	#4 UTF-8 filenames?
 	return absolutePath, baseName, extension
+}
+
+// Create the needed directory if it does not exist; candidate for nonstdlib
+// https://siongui.github.io/2017/03/28/go-create-directory-if-not-exist/
+func createDirIfNotExist(dir string) {
+	if _, err := os.Stat(dir); os.IsNotExist(err) {
+		err = os.MkdirAll(dir, 0755)
+		if err != nil {
+			panic(err)
+		}
+	}
 }

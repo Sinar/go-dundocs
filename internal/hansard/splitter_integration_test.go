@@ -245,7 +245,7 @@ func TestSplitHansardDocumentPlan_ExecuteSplit(t *testing.T) {
 		wantErr     bool
 		wantedFiles []string
 	}{
-		{"no plan #1", fields{"", "", hansard.HansardDocument{}}, true, []string{}},
+		{"no plan #1", fields{"testdata/BukanLisan_41_60_36_39.pdf", "testdata/happy1-plan-execute", hansard.HansardDocument{}}, true, []string{}},
 		{"happy #1", fields{"testdata/BukanLisan_41_60_36_39.pdf", "testdata/happy1-plan-execute", hansard.HansardDocument{
 			HansardQuestions: []hansard.HansardQuestion{
 				{"58", 1, 1},
@@ -257,18 +257,18 @@ func TestSplitHansardDocumentPlan_ExecuteSplit(t *testing.T) {
 			"dun15sesi3-BukanLisan_41_60_36_39-q59.pdf",
 			"dun15sesi3-BukanLisan_41_60_36_39-q60.pdf",
 		}},
-		{"happy #2", fields{"testdata/Lisan_Mulut_261_272.pdf", "testdata/happy2-plan-execute", hansard.HansardDocument{
-			HansardType: 0,
-			HansardQuestions: []hansard.HansardQuestion{
-				{"269", 1, 1},
-				{"270", 2, 4},
-				{"271", 5, 5},
-			},
-		}}, false, []string{
-			"dun15sesi3-Lisan_Mulut_261_272-269.pdf",
-			"dun15sesi3-Lisan_Mulut_261_272-270.pdf",
-			"dun15sesi3-Lisan_Mulut_261_272-271.pdf",
-		}},
+		//{"happy #2", fields{"testdata/Lisan_Mulut_261_272.pdf", "testdata/happy2-plan-execute", hansard.HansardDocument{
+		//	HansardType: 0,
+		//	HansardQuestions: []hansard.HansardQuestion{
+		//		{"269", 1, 1},
+		//		{"270", 2, 4},
+		//		{"271", 5, 5},
+		//	},
+		//}}, false, []string{
+		//	"dun15sesi3-Lisan_Mulut_261_272-269.pdf",
+		//	"dun15sesi3-Lisan_Mulut_261_272-270.pdf",
+		//	"dun15sesi3-Lisan_Mulut_261_272-271.pdf",
+		//}},
 	}
 	// Prepare the PDF test cases we will use in the tests ..
 	// Same as used in  hansard_integration_tests; we will run them  here to set it up
@@ -315,6 +315,7 @@ func TestSplitHansardDocumentPlan_ExecuteSplit(t *testing.T) {
 			}
 
 			if exerr != nil {
+				// Expected; error, just leave
 				return
 			}
 
