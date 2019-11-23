@@ -2,7 +2,6 @@ package hansard_test
 
 import (
 	"flag"
-	"fmt"
 	"io/ioutil"
 	"log"
 	"os"
@@ -21,6 +20,31 @@ import (
 var updateSplitterGolden = flag.Bool("updateSplitterGolden", false, "update SplitHansardDocPlan .golden files")
 
 //var updateSplitterFixture = flag.Bool("updateSplitterFixture", false, "update SplitHansardDocPlan .fixture plans")
+
+var testDir = ""
+
+func TestMain(m *testing.M) {
+	//log.Println("Do stuff BEFORE the tests!")
+	// Dynamic value; if in internal, chdir into hansard .. looks dirty :(
+
+	// **** START UGLY *******
+	//_, filename, _, _ := runtime.Caller(0)
+	//wddir := path.Join(path.Dir(filename), "..")
+	wddir, _ := os.Getwd()
+	_, curDir := filepath.Split(wddir)
+	//fmt.Println("CUR_DIR:", curDir)
+	if curDir == "internal" {
+		cderr := os.Chdir(filepath.Join(wddir, "hansard"))
+		if cderr != nil {
+			panic(cderr)
+		}
+	}
+	testDir, _ = os.Getwd()
+	// **** END UGLY *******
+	exitVal := m.Run()
+	//log.Println("Do stuff AFTER the tests!")
+	os.Exit(exitVal)
+}
 
 func TestNewSplitHansardDocumentPlan(t *testing.T) {
 	type args struct {
@@ -247,28 +271,31 @@ func TestSplitHansardDocumentPlan_ExecuteSplit(t *testing.T) {
 	}{
 		{"no plan #1", fields{"testdata/BukanLisan_41_60_36_39.pdf", "testdata/happy1-plan-execute", hansard.HansardDocument{}}, true, []string{}},
 		{"happy #1", fields{"testdata/BukanLisan_41_60_36_39.pdf", "testdata/happy1-plan-execute", hansard.HansardDocument{
+			StateAssemblySession: "dun15sesi3",
+			HansardType:          hansard.HANSARD_WRITTEN,
 			HansardQuestions: []hansard.HansardQuestion{
 				{"58", 1, 1},
 				{"59", 2, 3},
 				{"60", 4, 4},
 			},
 		}}, false, []string{
-			"dun15sesi3-BukanLisan_41_60_36_39-58.pdf",
-			"dun15sesi3-BukanLisan_41_60_36_39-q59.pdf",
-			"dun15sesi3-BukanLisan_41_60_36_39-q60.pdf",
+			"BukanLisan_41_60_36_39/dun15sesi3-soalan-58.pdf",
+			"BukanLisan_41_60_36_39/dun15sesi3-soalan-59.pdf",
+			"BukanLisan_41_60_36_39/dun15sesi3-soalan-60.pdf",
 		}},
-		//{"happy #2", fields{"testdata/Lisan_Mulut_261_272.pdf", "testdata/happy2-plan-execute", hansard.HansardDocument{
-		//	HansardType: 0,
-		//	HansardQuestions: []hansard.HansardQuestion{
-		//		{"269", 1, 1},
-		//		{"270", 2, 4},
-		//		{"271", 5, 5},
-		//	},
-		//}}, false, []string{
-		//	"dun15sesi3-Lisan_Mulut_261_272-269.pdf",
-		//	"dun15sesi3-Lisan_Mulut_261_272-270.pdf",
-		//	"dun15sesi3-Lisan_Mulut_261_272-271.pdf",
-		//}},
+		{"happy #2", fields{"testdata/Lisan_Mulut_261_272.pdf", "testdata/happy2-plan-execute", hansard.HansardDocument{
+			StateAssemblySession: "dun15sesi3",
+			HansardType:          hansard.HANSARD_SPOKEN,
+			HansardQuestions: []hansard.HansardQuestion{
+				{"269", 1, 1},
+				{"270", 2, 4},
+				{"271", 5, 5},
+			},
+		}}, false, []string{
+			"Lisan_Mulut_261_272/dun15sesi3-soalan-269.pdf",
+			"Lisan_Mulut_261_272/dun15sesi3-soalan-270.pdf",
+			"Lisan_Mulut_261_272/dun15sesi3-soalan-271.pdf",
+		}},
 	}
 	// Prepare the PDF test cases we will use in the tests ..
 	// Same as used in  hansard_integration_tests; we will run them  here to set it up
@@ -277,16 +304,16 @@ func TestSplitHansardDocumentPlan_ExecuteSplit(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			// Load up the SplitPlan aka HansardDocument
-
 			// Prepare TempDir for working with it
 			dir, err := ioutil.TempDir("", "dundocs-splitter")
 			if err != nil {
 				log.Fatal(err)
 			}
 			// Comment out below if need to see the output in dir
-			//defer os.RemoveAll(dir)
+			defer os.RemoveAll(dir)
+			// DEBUG
 			log.Println("Dir is ", dir)
-			// Is below redundant?
+			// Calculate the absolute versions
 			absoluteDataDir, dderr := filepath.Abs(dir)
 			if dderr != nil {
 				panic(dderr)
@@ -301,7 +328,7 @@ func TestSplitHansardDocumentPlan_ExecuteSplit(t *testing.T) {
 			}
 			// DEBUG
 			//fmt.Println("DATA_PATH: ", absoluteDataDir, " PLAN_PATH: ", absolutePlanDir)
-			s := hansard.NewEmptySplitHansardDocumentPlan(absoluteDataDir, absolutePlanDir, "dun15sesi3")
+			s := hansard.NewEmptySplitHansardDocumentPlan(absoluteDataDir, absolutePlanDir, "")
 			// Plan loaded; assume it is extracted from split.yml
 			s.HansardDocument = tt.fields.hansardDocument
 			// DEBUG
@@ -321,8 +348,8 @@ func TestSplitHansardDocumentPlan_ExecuteSplit(t *testing.T) {
 
 			for _, fileName := range tt.wantedFiles {
 				// DEBUG
-				fmt.Println("Check split file at: ", absoluteSplitOutput+"/"+fileName)
-				_, rerr := ioutil.ReadFile(absoluteSplitOutput + "/" + fileName)
+				//fmt.Println("Check split file at: ", absoluteSplitOutput+"/"+fileName)
+				_, rerr := ioutil.ReadFile(filepath.Join(absoluteSplitOutput, fileName))
 				if rerr != nil {
 					t.Errorf("cannot read: %s", rerr)
 				}

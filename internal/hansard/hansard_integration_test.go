@@ -20,6 +20,9 @@ var updateHansard = flag.Bool("updateHansard", false, "update Hansard .golden fi
 var updateHansardPDF = flag.Bool("updateHansardPDF", false, "update Hansard .fixture PDFs")
 
 func TestNewHansardQuestions(t *testing.T) {
+	// Not sure why here .. <== HACK ALERT!!! ==
+	os.Chdir(testDir)
+	//  Without above; test fails  when go test ./... :(
 	type args struct {
 		fixtureLabel     string
 		pdfPath          string

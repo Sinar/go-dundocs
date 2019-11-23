@@ -220,9 +220,6 @@ func (s *SplitHansardDocumentPlan) ExecuteSplit(absoluteSrcPDF, absoluteSplitOut
 		//finalMergedPDFPath := filepath.Join(absoluteSplitOutput, srcBasename, fmt.Sprintf("%s-soalan-%s.pdf", label, hq.QuestionNum))
 
 		// DO the actuak split ..
-		fmt.Println("Split Question: ", hansardQuestion.QuestionNum)
-		// Write the splitoutput  to this final location
-		fmt.Println("Save  split file into Dir: "+absoluteSplitOutput+" w/ fileName: ", finalFileName)
 		ssqerr := splitSingleQuestion(
 			s.HansardDocument.StateAssemblySession,
 			absoluteSrcPDF, absoluteSplitOutput, finalFileName,
@@ -259,8 +256,8 @@ func prepareSplitAPI(absoluteSrcPDF, scratchDir string) error {
 	// Relax validation  --> https://github.com/hhrutter/pdfcpu/issues/80
 	conf := pdfcpu.NewDefaultConfiguration()
 	// DEBUG
-	fmt.Println("In prepareSplitAPI!!")
-	fmt.Println("Split ", absoluteSrcPDF, " to singles in ", scratchDir)
+	//fmt.Println("In prepareSplitAPI!!")
+	//fmt.Println("Split ", absoluteSrcPDF, " to singles in ", scratchDir)
 	sperr := papi.SplitFile(absoluteSrcPDF, scratchDir, 1, conf)
 	if sperr != nil {
 		return sperr
@@ -272,27 +269,28 @@ func prepareSplitAPI(absoluteSrcPDF, scratchDir string) error {
 }
 
 func splitSingleQuestion(label, absoluteSrcPDF, absoluteSplitOutput, finalFileName string, hq HansardQuestion) error {
-	fmt.Println("LABEL: ", label)
+	// DEBUG
+	//fmt.Println("LABEL: ", label)
 	// Derive  the needed basename
-	//srcBasename := "SRC_BASENAME"
 	_, srcBasename, _ := normalizeToAbsolutePath(absoluteSrcPDF)
-
-	fmt.Println("Basename derived from: ", absoluteSrcPDF, " is ", srcBasename)
+	// DEBUG
+	//fmt.Println("Basename derived from: ", absoluteSrcPDF, " is ", srcBasename)
 
 	// Pre-reqs are done; now can start the split itself ..
 	var pagesToMerge []string
 
 	for i := hq.PageNumStart; i <= hq.PageNumEnd; i++ {
-		//sourcePDFPath := fmt.Sprintf("%s/raw/splitout/%s/%s/pages/%s_%d.pdf", currentWorkingDir, hansardType, sessionName, sessionName, i)
+		//sourcePDFPath := fmt.Sprintf("%s/raw/splitout/%s/%s/scratch/%s_%d.pdf", currentWorkingDir, hansardType, sessionName, sessionName, i)
 		sourcePDFPath := filepath.Join(absoluteSplitOutput, "scratch", fmt.Sprintf("%s_%d.pdf", srcBasename, i))
 		pagesToMerge = append(pagesToMerge, sourcePDFPath)
 	}
 
 	// Ensure the merged directory is there ..
 	createDirIfNotExist(filepath.Join(absoluteSplitOutput, srcBasename))
-	//finalMergedPDFPath := fmt.Sprintf("%s/splitout/%s-soalan-%s-%s.pdf", currentWorkingDir, label, hansardType, hq.QuestionNum)
+	//finalMergedPDFPath := fmt.Sprintf("%s/splitout/<Baename>/<SessionName>-soalan-%s.pdf", currentWorkingDir, label, hansardType, hq.QuestionNum)
 	finalMergedPDFPath := filepath.Join(absoluteSplitOutput, srcBasename, fmt.Sprintf("%s-soalan-%s.pdf", label, hq.QuestionNum))
-	fmt.Println(">>>=========== Merged file at: ", finalMergedPDFPath, " ==============<<<<<<")
+	// DEBUG
+	//fmt.Println(">>>=========== Merged file at: ", finalMergedPDFPath, " ==============<<<<<<")
 
 	// Relax validation  --> https://github.com/hhrutter/pdfcpu/issues/80
 	// Real-life data are pretty broken ..
