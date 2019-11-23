@@ -13,24 +13,6 @@ import (
 	"gopkg.in/yaml.v2"
 )
 
-// Configuration of a Context from outside-in ..
-type Configuration struct {
-	// DUN Session Label
-	DUNSession string
-
-	// ./raw + ./data folders are assumed to be relative to this dir
-	WorkingDir string
-
-	// Data directory name; can be relative or absolute?
-	DataDir string
-
-	// Source PDF can be anywhere; maybe make it a Reader to be read direct from S3?
-	SourcePDFPath string
-
-	// Options?
-	Options *ExtractPDFOptions
-}
-
 type SplitHansardDocumentPlan struct {
 	dataDir         string
 	PlanDir         string

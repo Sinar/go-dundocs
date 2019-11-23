@@ -24,9 +24,8 @@ var updateSplitterGolden = flag.Bool("updateSplitterGolden", false, "update Spli
 var testDir = ""
 
 func TestMain(m *testing.M) {
-	//log.Println("Do stuff BEFORE the tests!")
+	log.Println("Do stuff BEFORE the tests!")
 	// Dynamic value; if in internal, chdir into hansard .. looks dirty :(
-
 	// **** START UGLY *******
 	//_, filename, _, _ := runtime.Caller(0)
 	//wddir := path.Join(path.Dir(filename), "..")
@@ -42,7 +41,7 @@ func TestMain(m *testing.M) {
 	testDir, _ = os.Getwd()
 	// **** END UGLY *******
 	exitVal := m.Run()
-	//log.Println("Do stuff AFTER the tests!")
+	log.Println("Do stuff AFTER the tests!")
 	os.Exit(exitVal)
 }
 

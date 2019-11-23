@@ -12,6 +12,9 @@ func TestDUNDocs_Plan(t *testing.T) {
 	type fields struct {
 		Conf dundocs.Configuration
 	}
+	// Test normal plan
+	// Test plan + split in one; flags being passed in
+	// SImulate from UI too?
 	tests := []struct {
 		name   string
 		fields fields
@@ -32,6 +35,8 @@ func TestDUNDocs_Split(t *testing.T) {
 	type fields struct {
 		Conf dundocs.Configuration
 	}
+	// Test normal split
+	// SImulate from UI too?
 	tests := []struct {
 		name   string
 		fields fields

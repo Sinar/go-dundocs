@@ -49,12 +49,24 @@ func (dd *DUNDocs) Plan() {
 	log.Println("In Plan ..")
 	//pdfPath := dd.Conf.SourcePDFPath
 	//conf := Configuration{}
-	splitPlan := hansard.NewSplitHansardDocumentPlan(
-		dd.Conf.SourcePDFPath, dd.Conf.WorkingDir,
-		dd.Conf.DataDir, dd.DUNSession,
-		dd.Options.StartPage, dd.Options.NumPages)
-	// Perissit it
-	splitPlan.SavePlan()
+	//splitPlan := hansard.NewSplitHansardDocumentPlan(
+	//	dd.Conf.SourcePDFPath, dd.Conf.WorkingDir,
+	//	dd.Conf.DataDir, dd.DUNSession,
+	//	dd.Options.StartPage, dd.Options.NumPages)
+	//// Perissit it
+	//splitPlan.SavePlan()
+
+	c := hansard.Configuration{
+		DUNSession:    "",
+		WorkingDir:    "",
+		DataDir:       "",
+		SourcePDFPath: "",
+		Options:       nil,
+	}
+	hansard.PlanAndSave(c)
+
+	// if see flag; then call the following; not executed by default ..
+	//hansard.LoadAndSplit()
 }
 
 func (dd *DUNDocs) Split() {
@@ -64,6 +76,15 @@ func (dd *DUNDocs) Split() {
 		dd.Conf.DataDir, "", dd.DUNSession)
 	splitPlan.LoadPlan()
 	splitPlan.ExecuteSplit(dd.Conf.SourcePDFPath, dd.Conf.DataDir)
+
+	c := hansard.Configuration{
+		DUNSession:    "",
+		WorkingDir:    "",
+		DataDir:       "",
+		SourcePDFPath: "",
+		Options:       nil,
+	}
+	hansard.LoadAndSplit(c)
 }
 
 func (dd *DUNDocs) Reset() {
