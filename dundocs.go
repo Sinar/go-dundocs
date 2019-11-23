@@ -7,7 +7,12 @@ import (
 )
 
 type DUNDocs struct {
+	// DUN Session Label
+	DUNSession string
+
 	Conf Configuration
+
+	Options *ExtractPDFOptions
 }
 
 // CommandMode specifies the operation being executed.
@@ -20,32 +25,45 @@ const (
 	RESET
 )
 
-// Configuration of a Context.
-type Configuration struct {
-	// DUN Session Label
-	DUNSession string
+type ExtractPDFOptions struct {
+	StartPage int
+	NumPages  int
+}
 
-	// Hansard Type
-	HansardType hansard.HansardType
+type Configuration struct {
+	// Source PDF can be anywhere; maybe make it a Reader to be read direct from S3?
+	SourcePDFPath string
 
 	// ./raw + ./data folders are assumed to be relative to this dir
 	WorkingDir string
 
-	// Source PDF can be anywhere; maybe make it a Reader to be read direct from S3?
-	SourcePDFPath string
-
-	// Command being executed.
-	Cmd CommandMode
+	// Data directory name; can be relative or absolute?
+	DataDir string
 }
 
+func NewDUNDocs() *DUNDocs {
+	dunDocs := DUNDocs{}
+	return &dunDocs
+}
 func (dd *DUNDocs) Plan() {
 	log.Println("In Plan ..")
 	//pdfPath := dd.Conf.SourcePDFPath
+	//conf := Configuration{}
+	splitPlan := hansard.NewSplitHansardDocumentPlan(
+		dd.Conf.SourcePDFPath, dd.Conf.WorkingDir,
+		dd.Conf.DataDir, dd.DUNSession,
+		dd.Options.StartPage, dd.Options.NumPages)
+	// Perissit it
+	splitPlan.SavePlan()
 }
 
 func (dd *DUNDocs) Split() {
 	log.Println("In Split ..")
 	// Load plan
+	splitPlan := hansard.NewEmptySplitHansardDocumentPlan(
+		dd.Conf.DataDir, "", dd.DUNSession)
+	splitPlan.LoadPlan()
+	splitPlan.ExecuteSplit(dd.Conf.SourcePDFPath, dd.Conf.DataDir)
 }
 
 func (dd *DUNDocs) Reset() {

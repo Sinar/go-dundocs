@@ -85,10 +85,10 @@ func NewEmptySplitHansardDocumentPlan(absoluteDataDir, absolutePlanDir, sessionN
 	return &splitPlan
 }
 
-func NewSplitHansardDocumentPlan(conf Configuration) *SplitHansardDocumentPlan {
+func NewSplitHansardDocumentPlan(sourcePDFPath, workingDir, dataDir, dunSession string, startPage, numPages int) *SplitHansardDocumentPlan {
 	// If we need to customize any options; put  it above ..
 	// Get PDF content
-	pdfDoc, nperr := NewPDFDocument(conf.SourcePDFPath, conf.Options)
+	pdfDoc, nperr := NewPDFDocument(sourcePDFPath, nil)
 	if nperr != nil {
 		panic(nperr)
 	}
@@ -103,12 +103,12 @@ func NewSplitHansardDocumentPlan(conf Configuration) *SplitHansardDocumentPlan {
 	//		StateAssemblySession: conf.DUNSession,
 	//	},
 	//}
-	absoluteDataDir := GetAbsoluteDataDir(conf.WorkingDir, conf.DataDir)
+	absoluteDataDir := GetAbsoluteDataDir(workingDir, dataDir)
 	// Extract out filename as folder for split.yml plan
 	// https://stackoverflow.com/questions/13027912/trim-strings-suffix-or-extension
-	basePDFPath := filepath.Base(conf.SourcePDFPath)
+	basePDFPath := filepath.Base(sourcePDFPath)
 	absolutePlanDir := absoluteDataDir + fmt.Sprintf("/%s", strings.TrimSuffix(basePDFPath, filepath.Ext(basePDFPath)))
-	splitPlan := NewEmptySplitHansardDocumentPlan(absoluteDataDir, absolutePlanDir, conf.DUNSession)
+	splitPlan := NewEmptySplitHansardDocumentPlan(absoluteDataDir, absolutePlanDir, dunSession)
 	// Fill in the needed  plan
 	err := NewSplitHansardDocumentPlanContent(pdfDoc, splitPlan)
 	if err != nil {
