@@ -272,8 +272,11 @@ func prepareSplitAPI(absoluteSrcPDF, scratchDir string) error {
 }
 
 func splitSingleQuestion(label, absoluteSrcPDF, absoluteSplitOutput, finalFileName string, hq HansardQuestion) error {
+	fmt.Println("LABEL: ", label)
 	// Derive  the needed basename
-	srcBasename := "SRC_BASENAME"
+	//srcBasename := "SRC_BASENAME"
+	_, srcBasename, _ := normalizeToAbsolutePath(absoluteSrcPDF)
+
 	fmt.Println("Basename derived from: ", absoluteSrcPDF, " is ", srcBasename)
 
 	// Pre-reqs are done; now can start the split itself ..
@@ -281,7 +284,7 @@ func splitSingleQuestion(label, absoluteSrcPDF, absoluteSplitOutput, finalFileNa
 
 	for i := hq.PageNumStart; i <= hq.PageNumEnd; i++ {
 		//sourcePDFPath := fmt.Sprintf("%s/raw/splitout/%s/%s/pages/%s_%d.pdf", currentWorkingDir, hansardType, sessionName, sessionName, i)
-		sourcePDFPath := filepath.Join(absoluteSplitOutput, "pages", fmt.Sprintf("%s_%d", srcBasename, i))
+		sourcePDFPath := filepath.Join(absoluteSplitOutput, "scratch", fmt.Sprintf("%s_%d.pdf", srcBasename, i))
 		pagesToMerge = append(pagesToMerge, sourcePDFPath)
 	}
 
@@ -310,13 +313,32 @@ func prepareSplit() error {
 }
 
 // Normalize to Absolute Path
-func normalizeToAbsolutePath(relativePath string) (absolutePath string, baseName string, extension string) {
+func normalizeToAbsolutePath(relativePath string) (absoluteDir string, baseName string, extension string) {
 	// Scenarios:
 	// 	#1 Handle multiple '.' in filename
 	//	#2 Windows path
 	//	#3 No extensions
 	//	#4 UTF-8 filenames?
-	return absolutePath, baseName, extension
+	absolutePath, aerr := filepath.Abs(relativePath)
+	if aerr != nil {
+		panic(aerr)
+	}
+	//absoluteDir = filepath.Dir(absolutePath)
+	//baseName = filepath.Base(absolutePath)
+	absoluteDir, baseName = filepath.Split(absolutePath)
+	filepath.SplitList(absolutePath)
+	extension = filepath.Ext(absolutePath)
+	if strings.ToLower(extension) == ".pdf" {
+		baseName = strings.TrimSuffix(baseName, extension)
+		// Order matters!
+		extension = "pdf"
+	} else {
+		// Make ti explicit if not matcging PDF doc!
+		extension = ""
+	}
+	// Any '.' transform to '_'
+	baseName = strings.ReplaceAll(baseName, ".", "_")
+	return absoluteDir, baseName, extension
 }
 
 // For testing, ensure can get unique  TemoDir

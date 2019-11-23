@@ -1,6 +1,10 @@
 package hansard
 
 import (
+	"io/ioutil"
+	"log"
+	"os"
+	"path/filepath"
 	"reflect"
 	"testing"
 )
@@ -99,12 +103,37 @@ func Test_normalizeToAbsolutePath(t *testing.T) {
 		wantBaseName     string
 		wantExtension    string
 	}{
-		// TODO: Add test cases.
+		{"happy #1", args{"testdata/abc.pdf"}, "", "abc", "pdf"},
+		{"caps PDF #2", args{"testdata/ABC.Def.PDF"}, "", "ABC_Def", "pdf"},
+		{"weird #3", args{"/tmp/abc.def.123.pdf"}, "/tmp/", "abc_def_123", "pdf"},
+		{"no pdf ext #4", args{"/tmp/abc.def.123"}, "/tmp/", "abc_def_123", ""},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			// Prepare TemoDir working ..
+			// Prepare TempDir for working with it
+			dir, err := ioutil.TempDir("", "dundocs-splitter")
+			if err != nil {
+				log.Fatal(err)
+			}
+			// Comment out below if need to see the output in dir
+			defer os.RemoveAll(dir)
+			log.Println("Dir is ", dir)
+			// Go to dir to execute
+			cerr := os.Chdir(dir)
+			if cerr != nil {
+				panic(cerr)
+			}
 			gotAbsolutePath, gotBaseName, gotExtension := normalizeToAbsolutePath(tt.args.relativePath)
+			// If tt.wantAbsolutePath is empty; means  make it  to be tempDir
+			if tt.wantAbsolutePath == "" {
+				// Only if relative is actually relative
+				if !filepath.IsAbs(tt.args.relativePath) {
+					b, _ := filepath.Split(tt.args.relativePath)
+					// NOTE: A bot of a hack, need a more elegant way? Maybe no need to check too ..
+					tt.wantAbsolutePath = filepath.Join("/private", dir, b) + "/"
+				}
+			}
 			if gotAbsolutePath != tt.wantAbsolutePath {
 				t.Errorf("normalizeToAbsolutePath() gotAbsolutePath = %v, want %v", gotAbsolutePath, tt.wantAbsolutePath)
 			}
