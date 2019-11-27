@@ -14,5 +14,5 @@ require (
 	github.com/turbinelabs/cli v0.0.0-20181025162358-f808c62dd6bb
 	github.com/turbinelabs/nonstdlib v0.0.0-20181025162720-c8a214aafdbb // indirect
 	github.com/turbinelabs/test v0.0.0-20181025162838-f1836c79d8d8 // indirect
-	gopkg.in/yaml.v2 v2.2.5
+	gopkg.in/yaml.v2 v2.2.7
 )
