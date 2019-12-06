@@ -36,6 +36,11 @@ func GetAbsoluteDataDir(workingDir, dataDir string) string {
 	//if absoluteDataDir == "" {
 	//	panic(fmt.Errorf("BEFORE: %s AFTER: %s", dataDir, absoluteDataDir))
 	//}
+	// Don't forget to make it actuaslly absolute!!
+	absoluteDataDir, aberr := filepath.Abs(absoluteDataDir)
+	if aberr != nil {
+		panic(aberr)
+	}
 	return absoluteDataDir
 }
 
@@ -67,10 +72,10 @@ func NewEmptySplitHansardDocumentPlan(absoluteDataDir, absolutePlanDir, sessionN
 	return &splitPlan
 }
 
-func NewSplitHansardDocumentPlan(sourcePDFPath, workingDir, dataDir, dunSession string, startPage, numPages int) *SplitHansardDocumentPlan {
+func NewSplitHansardDocumentPlan(sourcePDFPath, workingDir, dataDir, dunSession string, options *ExtractPDFOptions) *SplitHansardDocumentPlan {
 	// If we need to customize any options; put  it above ..
 	// Get PDF content
-	pdfDoc, nperr := NewPDFDocument(sourcePDFPath, nil)
+	pdfDoc, nperr := NewPDFDocument(sourcePDFPath, options)
 	if nperr != nil {
 		panic(nperr)
 	}
@@ -85,6 +90,9 @@ func NewSplitHansardDocumentPlan(sourcePDFPath, workingDir, dataDir, dunSession 
 	//		StateAssemblySession: conf.DUNSession,
 	//	},
 	//}
+	if workingDir == "" {
+		workingDir = "."
+	}
 	absoluteDataDir := GetAbsoluteDataDir(workingDir, dataDir)
 	// Extract out filename as folder for split.yml plan
 	// https://stackoverflow.com/questions/13027912/trim-strings-suffix-or-extension

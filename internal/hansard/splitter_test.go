@@ -175,3 +175,25 @@ func Test_normalizeTempDirAbsolutePath(t *testing.T) {
 		})
 	}
 }
+
+func TestGetAbsoluteDataDir(t *testing.T) {
+	type args struct {
+		workingDir string
+		dataDir    string
+	}
+	tests := []struct {
+		name string
+		args args
+		want string
+	}{
+		// TODO: Add test cases.
+		// test case: panic: DATA: ././data + PLAN: ././data/BASENAME MUST BE ABSOLUTE! [recovered]
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := GetAbsoluteDataDir(tt.args.workingDir, tt.args.dataDir); got != tt.want {
+				t.Errorf("GetAbsoluteDataDir() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}

@@ -56,15 +56,35 @@ func (dd *DUNDocs) Plan() {
 	//// Perissit it
 	//splitPlan.SavePlan()
 
-	c := hansard.Configuration{
-		DUNSession:    "",
-		WorkingDir:    "",
-		DataDir:       "",
-		SourcePDFPath: "",
-		Options:       nil,
+	var options *hansard.ExtractPDFOptions
+	// Fill in the options if needed ..
+	if dd.Options != nil {
+		options = &hansard.ExtractPDFOptions{
+			StartPage: dd.Options.StartPage,
+			NumPages:  dd.Options.NumPages,
+		}
 	}
-	hansard.PlanAndSave(c)
-
+	// Prepare config
+	conf := hansard.Configuration{
+		DUNSession:    dd.DUNSession,
+		WorkingDir:    dd.Conf.WorkingDir,
+		DataDir:       dd.Conf.DataDir,
+		SourcePDFPath: dd.Conf.SourcePDFPath,
+		Options:       options,
+	}
+	// DEBUG
+	//spew.Dump(c)
+	//err := hansard.PlanAndSave(conf)
+	//if err != nil {
+	//	panic(err)
+	//}
+	// Above  no need; as equivalent to below; can be r efectored out I guess ..
+	splitPlan := hansard.NewSplitHansardDocumentPlan(conf.SourcePDFPath, conf.WorkingDir, conf.DataDir, conf.DUNSession, conf.Options)
+	// Try to persist the plan
+	sperr := splitPlan.SavePlan()
+	if sperr != nil {
+		panic(sperr)
+	}
 	// if see flag; then call the following; not executed by default ..
 	//hansard.LoadAndSplit()
 }

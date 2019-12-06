@@ -18,26 +18,41 @@ type Configuration struct {
 	Options *ExtractPDFOptions
 }
 
-func PlanAndSave(conf Configuration) error {
-	// Pre-req; setup absolute paths?
-
-	// Get pdfdoc
-	pdfDoc, pderr := NewPDFDocument(conf.SourcePDFPath, conf.Options)
-	if pderr != nil {
-		return pderr
-	}
-	// get splitplan
-	splitPlan := NewEmptySplitHansardDocumentPlan(conf.DataDir, conf.DataDir, conf.DUNSession)
-	// Extract out the needed content
-	serr := NewSplitHansardDocumentPlanContent(pdfDoc, splitPlan)
-	if serr != nil {
-		return serr
-	}
-	// persist the plan + split ..
-	splitPlan.SavePlan()
-	// get back here; is ok
-	return nil
-}
+//func PlanAndSave(conf Configuration) error {
+//	// Pre-req; setup absolute paths?
+//	//spew.Dump(conf)
+//	splitPlan := NewSplitHansardDocumentPlan(conf.SourcePDFPath, conf.WorkingDir, conf.DataDir, conf.DUNSession, conf.Options)
+//	//dir := "." // Default current directory
+//	//if conf.WorkingDir != "" {
+//	//	dir = conf.WorkingDir
+//	//}
+//	//dataDir := "./data"
+//	//if conf.DataDir != "" {
+//	//	dataDir = conf.DataDir
+//	//}
+//	//baseName := "BASENAME"
+//	//absoluteDataDir := GetAbsoluteDataDir(dir, dataDir)
+//	//absolutePlanDir := absoluteDataDir + "/" + baseName
+//	//// End pre-req setup ..
+//	//// Get pdfdoc
+//	//pdfDoc, pderr := NewPDFDocument(conf.SourcePDFPath, conf.Options)
+//	//if pderr != nil {
+//	//	return pderr
+//	//}
+//	//
+//	//
+//	//// get splitplan
+//	//splitPlan := NewEmptySplitHansardDocumentPlan(absoluteDataDir, absolutePlanDir, conf.DUNSession)
+//	//// Extract out the needed content
+//	//serr := NewSplitHansardDocumentPlanContent(pdfDoc, splitPlan)
+//	//if serr != nil {
+//	//	return serr
+//	//}
+//	// persist the plan + split ..
+//	splitPlan.SavePlan()
+//	// get back here; is ok
+//	return nil
+//}
 
 func LoadAndSplit(conf Configuration) error {
 	// Pre-req; setup absolute paths?
