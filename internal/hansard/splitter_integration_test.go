@@ -2,6 +2,7 @@ package hansard_test
 
 import (
 	"flag"
+	"fmt"
 	"io/ioutil"
 	"log"
 	"os"
@@ -176,7 +177,7 @@ func TestSplitHansardDocumentPlan_SavePlan(t *testing.T) {
 					t.Errorf("SavePlan() error = %v, wantErr %v", serr, tt.wantErr)
 					return
 				}
-				// Check planDir actually created and exists ..
+				// Check planFile actually created and exists ..
 				if _, err := os.Stat(absolutePlanDir); os.IsNotExist(err) {
 					t.Errorf("PLANDIR_MISSING: %s", err)
 					return
@@ -212,10 +213,10 @@ func TestSplitHansardDocumentPlan_LoadPlan(t *testing.T) {
 		fixtureLabel string
 	}
 	tests := []struct {
-		name    string
-		args    args
-		planDir string
-		wantErr bool
+		name     string
+		args     args
+		planFile string
+		wantErr  bool
 	}{
 		// NOTE: Not too nice; still tied to physical path that are not in testdata
 		{"happy #1", args{"HDOC-Lisan-1-20"}, "testdata/plan-sample-HDOC-Lisan-1-20.golden", false},
@@ -230,13 +231,13 @@ func TestSplitHansardDocumentPlan_LoadPlan(t *testing.T) {
 			if dderr != nil {
 				panic(dderr)
 			}
-			absolutePlanDir, plerr := filepath.Abs(tt.planDir)
+			absolutePlanFile, plerr := filepath.Abs(tt.planFile)
 			if plerr != nil {
 				panic(plerr)
 			}
 			// DEBUG
-			//fmt.Println("DATA_PATH: ", absoluteDataDir, " PLAN_PATH: ", absolutePlanDir)
-			s := hansard.NewEmptySplitHansardDocumentPlan(absoluteDataDir, absolutePlanDir, "dun15sesi3")
+			fmt.Println("DATA_PATH: ", absoluteDataDir, " PLAN_PATH: ", absolutePlanFile)
+			s := hansard.NewEmptySplitHansardDocumentPlan(absoluteDataDir, absolutePlanFile, "dun15sesi3")
 			// Load it into the struct
 			if err := s.LoadPlan(); (err != nil) != tt.wantErr {
 				t.Errorf("LoadPlan() error = %v, wantErr %v", err, tt.wantErr)

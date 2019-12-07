@@ -44,26 +44,46 @@ func GetAbsoluteDataDir(workingDir, dataDir string) string {
 	return absoluteDataDir
 }
 
-func NewEmptySplitHansardDocumentPlan(absoluteDataDir, absolutePlanDir, sessionName string) *SplitHansardDocumentPlan {
+func GetAbsoluteSplitOutDir(workingDir, splitOutDir string) string {
+	// If nothing to be done; return the absolute customized splitOutDir ..
+	if filepath.IsAbs(splitOutDir) {
+		return splitOutDir
+	}
+	// OK now apply the rule
+	var absoluteSplitOutput string
+	if splitOutDir == "" {
+		absoluteSplitOutput = workingDir + "/splitout"
+	} else {
+		absoluteSplitOutput = workingDir + fmt.Sprintf("/%s", splitOutDir)
+	}
+	// Don't forget to make it actuaslly absolute!!
+	absoluteSplitOutput, aberr := filepath.Abs(absoluteSplitOutput)
+	if aberr != nil {
+		panic(aberr)
+	}
+	return absoluteSplitOutput
+}
+
+func NewEmptySplitHansardDocumentPlan(absoluteDataDir, absolutePlanFile, sessionName string) *SplitHansardDocumentPlan {
 	// Assume: sourcePDFFilename stripped off; validation here??
 	// Assume: dataDir and PlanDir must become absolute before passing it back? Validate?
-	if !(filepath.IsAbs(absoluteDataDir) && filepath.IsAbs(absolutePlanDir)) {
-		panic(fmt.Errorf("DATA: %s + PLAN: %s MUST BE ABSOLUTE!", absoluteDataDir, absolutePlanDir))
+	if !(filepath.IsAbs(absoluteDataDir) && filepath.IsAbs(absolutePlanFile)) {
+		panic(fmt.Errorf("DATA: %s + PLAN: %s MUST BE ABSOLUTE!", absoluteDataDir, absolutePlanFile))
 	}
 	// If absolute dataDir; just take it  as is, no use for workingDir
 	//absoluteDataDir := GetAbsoluteDataDir(workingDir, dataDir)
 	// Extract out filename as folder for split.yml plan
 	// https://stackoverflow.com/questions/13027912/trim-strings-suffix-or-extension
 	//basePDFPath := filepath.Base(sourcePDFPath)
-	//planDir := absoluteDataDir + fmt.Sprintf("/%s", strings.TrimSuffix(basePDFPath, filepath.Ext(basePDFPath)))
+	//planFile := absoluteDataDir + fmt.Sprintf("/%s", strings.TrimSuffix(basePDFPath, filepath.Ext(basePDFPath)))
 	//// DEBUG
-	//fmt.Println("PLAN_PATH: ", planDir)
+	//fmt.Println("PLAN_PATH: ", planFile)
 	// Do abs conversion here?? for PlanDir only? Is it needed; is relative good enough? Maybe ..
 	//<TODO>??
 	// Assemble the pieces here ..
 	splitPlan := SplitHansardDocumentPlan{
 		dataDir: absoluteDataDir,
-		PlanDir: absolutePlanDir,
+		PlanDir: absolutePlanFile,
 		HansardDocument: HansardDocument{
 			StateAssemblySession: sessionName,
 			HansardQuestions:     []HansardQuestion{},
@@ -85,7 +105,7 @@ func NewSplitHansardDocumentPlan(sourcePDFPath, workingDir, dataDir, dunSession 
 	// TODO: Filename needs to be  extracted out; and need to handle those cases with '.' in filename
 	//splitPlan := SplitHansardDocumentPlan{
 	//	dataDir: conf.WorkingDir,
-	//	PlanDir: planDir,
+	//	PlanDir: planFile,
 	//	HansardDocument: HansardDocument{
 	//		StateAssemblySession: conf.DUNSession,
 	//	},
@@ -198,7 +218,6 @@ func (s *SplitHansardDocumentPlan) ExecuteSplit(absoluteSrcPDF, absoluteSplitOut
 		// DEBUG!
 		//spew.Dump(hansardQuestion)
 		// fmt.Sprintf("%s-soalan-%s.pdf", label, hq.QuestionNum)
-		finalFileName := "wassup!!" // Is this to be derived? template?
 		// Can also prepare the needed scratch spaces?
 		// Derive  the needed basename ** TODO ***
 		//srcBasename := "SRC_BASENAME"
@@ -210,10 +229,8 @@ func (s *SplitHansardDocumentPlan) ExecuteSplit(absoluteSrcPDF, absoluteSplitOut
 		//finalMergedPDFPath := filepath.Join(absoluteSplitOutput, srcBasename, fmt.Sprintf("%s-soalan-%s.pdf", label, hq.QuestionNum))
 
 		// DO the actuak split ..
-		ssqerr := splitSingleQuestion(
-			s.HansardDocument.StateAssemblySession,
-			absoluteSrcPDF, absoluteSplitOutput, finalFileName,
-			hansardQuestion)
+		ssqerr := splitSingleQuestion(s.HansardDocument.StateAssemblySession,
+			absoluteSrcPDF, absoluteSplitOutput, hansardQuestion)
 		if ssqerr != nil {
 			// Need to determine if recoverable??
 			// What is recoverable; for now; give  up
@@ -258,7 +275,7 @@ func prepareSplitAPI(absoluteSrcPDF, scratchDir string) error {
 	return nil
 }
 
-func splitSingleQuestion(label, absoluteSrcPDF, absoluteSplitOutput, finalFileName string, hq HansardQuestion) error {
+func splitSingleQuestion(label, absoluteSrcPDF, absoluteSplitOutput string, hq HansardQuestion) error {
 	// DEBUG
 	//fmt.Println("LABEL: ", label)
 	// Derive  the needed basename

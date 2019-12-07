@@ -1,7 +1,10 @@
 package dundocs
 
 import (
+	"fmt"
 	"log"
+	"path/filepath"
+	"strings"
 
 	"github.com/Sinar/go-dundocs/internal/hansard"
 )
@@ -91,20 +94,60 @@ func (dd *DUNDocs) Plan() {
 
 func (dd *DUNDocs) Split() {
 	log.Println("In Split ..")
-	// Load plan
-	splitPlan := hansard.NewEmptySplitHansardDocumentPlan(
-		dd.Conf.DataDir, "", dd.DUNSession)
-	splitPlan.LoadPlan()
-	splitPlan.ExecuteSplit(dd.Conf.SourcePDFPath, dd.Conf.DataDir)
-
-	c := hansard.Configuration{
-		DUNSession:    "",
-		WorkingDir:    "",
-		DataDir:       "",
-		SourcePDFPath: "",
-		Options:       nil,
+	// Setup; possibly into a helper function? Seen it repeated a few places
+	workingDir := "."
+	if dd.Conf.WorkingDir != "" {
+		workingDir = dd.Conf.WorkingDir
 	}
-	hansard.LoadAndSplit(c)
+	dataDir := ""
+	if dd.Conf.DataDir != "" {
+		dataDir = dd.Conf.DataDir
+	}
+	// Needs absolute Path for Source  .. absoluteSrcPDF, sperr := filepath.Abs(tt.fields.srcPDFPath)
+	sourcePDFPath, sperr := filepath.Abs(dd.Conf.SourcePDFPath)
+	if sperr != nil {
+		panic(sperr)
+	}
+	absoluteDataDir := hansard.GetAbsoluteDataDir(workingDir, dataDir)
+	// Extract out filename as folder for split.yml plan
+	// https://stackoverflow.com/questions/13027912/trim-strings-suffix-or-extension
+	basePDFPath := filepath.Base(sourcePDFPath)
+	// Plan file name is hardcoded split.yml
+	absolutePlanFile := absoluteDataDir + fmt.Sprintf("/%s/split.yml", strings.TrimSuffix(basePDFPath, filepath.Ext(basePDFPath)))
+	// Maybe  above to be moved  into NewEmptySplitHansardDocumentPlan?
+	splitPlan := hansard.NewEmptySplitHansardDocumentPlan(
+		absoluteDataDir, absolutePlanFile, dd.DUNSession)
+	// Load plan
+	lderr := splitPlan.LoadPlan()
+	if lderr != nil {
+		panic(lderr)
+	}
+	// DEBUG
+	//spew.Dump(splitPlan.HansardDocument)
+	// Setup  + execute; use the default splitOutDir
+	absoluteSplitOutput := hansard.GetAbsoluteSplitOutDir(workingDir, "")
+	exerr := splitPlan.ExecuteSplit(sourcePDFPath, absoluteSplitOutput)
+	if exerr != nil {
+		panic(exerr)
+	}
+	// Below also looks like a recurring pattern; restructure it  somehow? Not needed?
+	//var options *hansard.ExtractPDFOptions
+	//// Fill in the options if needed ..
+	//if dd.Options != nil {
+	//	options = &hansard.ExtractPDFOptions{
+	//		StartPage: dd.Options.StartPage,
+	//		NumPages:  dd.Options.NumPages,
+	//	}
+	//}
+	//// Prepare config
+	//conf := hansard.Configuration{
+	//	DUNSession:    dd.DUNSession,
+	//	WorkingDir:    dd.Conf.WorkingDir,
+	//	DataDir:       dd.Conf.DataDir,
+	//	SourcePDFPath: dd.Conf.SourcePDFPath,
+	//	Options:       options,
+	//}
+	//hansard.LoadAndSplit(conf)
 }
 
 func (dd *DUNDocs) Reset() {
