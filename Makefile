@@ -1,8 +1,8 @@
 run: build
-	@./go-dundocs
+	@./dundocs
 
 build:
-	@go build ./cmd/go-dundocs
+	@go build -o dundocs ./cmd/go-dundocs 
 
 # run: build
 # 	@./go-pardebate
@@ -30,7 +30,7 @@ release: $(PLATFORMS)
 
 $(PLATFORMS):
 	@mkdir -p dist/$(os)-$(arch)
-	@GOOS=$(os) GOARCH=$(arch) go build -o './dist/$(os)-$(arch)/go-pardocs_$(os)-$(arch)' ./cmd/go-pardocs
-	@GOOS=$(os) GOARCH=$(arch) go build -o './dist/$(os)-$(arch)/go-pardebate_$(os)-$(arch)' ./cmd/go-pardebate
+	@GOOS=$(os) GOARCH=$(arch) go build -o './dist/$(os)-$(arch)/go-dundocs_$(os)-$(arch)' ./cmd/go-dundocs
+	# @GOOS=$(os) GOARCH=$(arch) go build -o './dist/$(os)-$(arch)/go-pardebate_$(os)-$(arch)' ./cmd/go-pardebate
 
 .PHONY  release: $(PLATFORMS)
