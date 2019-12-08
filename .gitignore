@@ -28,7 +28,7 @@ splitout/*
 internal/hansard/raw/
 
 # Ignore data dir
-data/*
+# data/*
 
 # Ignore Goland
 .idea/*
