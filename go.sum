@@ -20,6 +20,8 @@ github.com/mattn/go-isatty v0.0.10 h1:qxFzApOv4WsAL965uUPIsXzAKCZxN2p9UqdhFS4ZW1
 github.com/mattn/go-isatty v0.0.10/go.mod h1:qgIWMr58cqv1PHHyhnkY9lrL7etaEgOFcMEpPG5Rm84=
 github.com/pdfcpu/pdfcpu v0.2.5 h1:7jBh0EOQgxxpe35XjTtEzjHJzVMHO3ZwUn8EYNEA6Ng=
 github.com/pdfcpu/pdfcpu v0.2.5/go.mod h1:VLoFmLCCnUkneQe2uTjK1ZgPveTUZKGgIb2OP20+W5c=
+github.com/pdfcpu/pdfcpu v0.3.1 h1:VAhouW6u0drME5i0XEi9tlrwIX9VIFt9fkthZjuoX1c=
+github.com/pdfcpu/pdfcpu v0.3.1/go.mod h1:VLoFmLCCnUkneQe2uTjK1ZgPveTUZKGgIb2OP20+W5c=
 github.com/pkg/errors v0.8.1 h1:iURUrRGxPUNPdy5/HRSm+Yj6okJ6UtLINN0Q9M4+h3I=
 github.com/pkg/errors v0.8.1/go.mod h1:bwawxfHBFNV+L2hUp1rHADufV3IMtnDRdf1r5NINEl0=
 github.com/pmezard/go-difflib v0.0.0-20151028094244-d8ed2627bdf0/go.mod h1:iKH77koFhYxTK1pcRnkKkqfTogsbg7gZNVY4sRDYZ/4=
