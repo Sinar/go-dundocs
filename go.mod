@@ -10,7 +10,7 @@ require (
 	github.com/hhrutter/tiff v0.0.0-20190829141212-736cae8d0bc7 // indirect
 	github.com/ledongthuc/pdf v0.0.0-20190830105003-8ac343ec9fdd
 	github.com/mattn/go-isatty v0.0.10 // indirect
-	github.com/pdfcpu/pdfcpu v0.2.5
+	github.com/pdfcpu/pdfcpu v0.3.2
 	github.com/sanity-io/litter v1.2.0
 	github.com/stretchr/testify v1.4.0 // indirect
 	github.com/turbinelabs/cli v0.0.0-20181025162358-f808c62dd6bb
