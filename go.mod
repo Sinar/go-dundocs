@@ -17,5 +17,5 @@ require (
 	github.com/turbinelabs/nonstdlib v0.0.0-20181025162720-c8a214aafdbb // indirect
 	github.com/turbinelabs/test v0.0.0-20181025162838-f1836c79d8d8 // indirect
 	golang.org/x/image v0.0.0-20191206065243-da761ea9ff43 // indirect
-	gopkg.in/yaml.v2 v2.2.7
+	gopkg.in/yaml.v2 v2.2.8
 )
