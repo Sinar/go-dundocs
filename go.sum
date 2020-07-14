@@ -20,6 +20,8 @@ github.com/mattn/go-isatty v0.0.10 h1:qxFzApOv4WsAL965uUPIsXzAKCZxN2p9UqdhFS4ZW1
 github.com/mattn/go-isatty v0.0.10/go.mod h1:qgIWMr58cqv1PHHyhnkY9lrL7etaEgOFcMEpPG5Rm84=
 github.com/pdfcpu/pdfcpu v0.2.5 h1:7jBh0EOQgxxpe35XjTtEzjHJzVMHO3ZwUn8EYNEA6Ng=
 github.com/pdfcpu/pdfcpu v0.2.5/go.mod h1:VLoFmLCCnUkneQe2uTjK1ZgPveTUZKGgIb2OP20+W5c=
+github.com/pdfcpu/pdfcpu v0.3.4 h1:9GbjTUaaT0uucD40MsP+L/1epXiCnC1+D92z/WBU6eQ=
+github.com/pdfcpu/pdfcpu v0.3.4/go.mod h1:/ULj8B76ZnB4445B0yuSASQqlN0kEO+khtEnmPdEoXU=
 github.com/pkg/errors v0.8.1 h1:iURUrRGxPUNPdy5/HRSm+Yj6okJ6UtLINN0Q9M4+h3I=
 github.com/pkg/errors v0.8.1/go.mod h1:bwawxfHBFNV+L2hUp1rHADufV3IMtnDRdf1r5NINEl0=
 github.com/pmezard/go-difflib v0.0.0-20151028094244-d8ed2627bdf0/go.mod h1:iKH77koFhYxTK1pcRnkKkqfTogsbg7gZNVY4sRDYZ/4=
@@ -42,6 +44,7 @@ golang.org/x/image v0.0.0-20190823064033-3a9bac650e44 h1:1/e6LjNi7iqpDTz8tCLSKoR
 golang.org/x/image v0.0.0-20190823064033-3a9bac650e44/go.mod h1:FeLwcggjj3mMvU+oOTbSwawSJRM1uh48EjtB4UJZlP0=
 golang.org/x/image v0.0.0-20191206065243-da761ea9ff43 h1:gQ6GUSD102fPgli+Yb4cR/cGaHF7tNBt+GYoRCpGC7s=
 golang.org/x/image v0.0.0-20191206065243-da761ea9ff43/go.mod h1:FeLwcggjj3mMvU+oOTbSwawSJRM1uh48EjtB4UJZlP0=
+golang.org/x/image v0.0.0-20191214001246-9130b4cfad52/go.mod h1:FeLwcggjj3mMvU+oOTbSwawSJRM1uh48EjtB4UJZlP0=
 golang.org/x/net v0.0.0-20190311183353-d8887717615a/go.mod h1:t9HGtf8HONx5eT2rtn7q6eTqICYqUVnKs3thJo3Qplg=
 golang.org/x/sync v0.0.0-20190423024810-112230192c58/go.mod h1:RxMgew5VJxzue5/jJTE5uejpjVlOe/izrB70Jof72aM=
 golang.org/x/sys v0.0.0-20190215142949-d0b11bdaac8a/go.mod h1:STP8DvDyc/dI5b8T5hshtkjS+E42TnysNCUPdjciGhY=
