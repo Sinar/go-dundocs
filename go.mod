@@ -5,7 +5,7 @@ go 1.13
 require (
 	github.com/davecgh/go-spew v1.1.1
 	github.com/golang/mock v1.3.1 // indirect
-	github.com/google/go-cmp v0.3.1
+	github.com/google/go-cmp v0.5.0
 	github.com/hhrutter/lzw v0.0.0-20190829144645-6f07a24e8650 // indirect
 	github.com/hhrutter/tiff v0.0.0-20190829141212-736cae8d0bc7 // indirect
 	github.com/ledongthuc/pdf v0.0.0-20190830105003-8ac343ec9fdd
